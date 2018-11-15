@@ -9,7 +9,8 @@ class Block {
     }
 
     collision(object) {
-        if (object.y <=this.upperHeight && (object.x >= this.x && object.x <= this.x + this.width)) return true;
+        if (object.y <= this.upperHeight && (object.x >= this.x && object.x <= this.x + this.width)) return true;
+        if (object.y >= config.world.height - this.lowerHeight && (object.x >= this.x && object.x <= this.x + this.width)) return true;
         return false;
     }
 

@@ -18,16 +18,16 @@ class Game {
     }
 
     gameIsOver() {
-        if (this.bird.y >= config.world.height || this.bird.y < 0) return true;
-        for (let i = 0; i < this.blocks.length; ++i) {
+        if (this.bird.y < 0) return true;
+        for (let i = 0; i < this.blocks.length; ++i)
             if (this.blocks[i].collision(this.bird)) return true;
-        }
+
         return false;
     }
 
 
     nextFrame() {
-        if (this.ticks % 200 === 0) this.blocks.push(new Block());
+        if (this.ticks % config.world.blocksFrequency === 0) this.blocks.push(new Block());
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.bird.render(this.ctx);

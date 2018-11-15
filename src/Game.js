@@ -18,7 +18,7 @@ class Game {
     }
 
     gameIsOver() {
-        if (this.bird.y < 0) return true;
+        if (this.bird.y >= config.world.height) return true;
         for (let i = 0; i < this.blocks.length; ++i)
             if (this.blocks[i].collision(this.bird)) return true;
 

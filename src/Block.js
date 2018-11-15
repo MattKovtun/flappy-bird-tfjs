@@ -8,6 +8,11 @@ class Block {
         this.width = config.block.width;
     }
 
+    collision(object) {
+        if (object.y <=this.upperHeight && (object.x >= this.x && object.x <= this.x + this.width)) return true;
+        return false;
+    }
+
     render(ctx) {
         ctx.beginPath();
         ctx.fillStyle = config.block.color;

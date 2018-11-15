@@ -18,11 +18,11 @@ class Game {
     }
 
     gameIsOver() {
-        let over = false;
-        if (this.bird.y >= config.world.height || this.bird.y < 0) over = true;
+        if (this.bird.y >= config.world.height || this.bird.y < 0) return true;
         for (let i = 0; i < this.blocks.length; ++i) {
-            // if (this.bird)
+            if (this.blocks[i].collision(this.bird)) return true;
         }
+        return false;
     }
 
 
@@ -42,6 +42,7 @@ class Game {
                 el.x--;
             });
         this.ticks++;
+        if (this.gameIsOver()) this.startNewGame();
     };
 }
 

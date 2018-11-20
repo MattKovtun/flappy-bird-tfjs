@@ -13,13 +13,28 @@ const main = () => {
     game.startNewGame();
     setInterval(() => {
         const worldState = game.nextFrame.bind(game)();
-        const action = agent.performAction(worldState);
+        const action = agent.act(worldState);
 
         // game.performAction(action);
 
     }, config.world.speed);
 };
-main();
+// main();
+
+
+const agentTest = () => {
+    game.startNewGame();
+
+    const worldState = game.nextFrame.bind(game)();
+    const action = agent.act(worldState);
+
+    console.log(action);
+    // game.performAction(action);
+
+
+
+};
+agentTest();
 
 
 document.body.addEventListener("keypress", (ev) => {

@@ -19,4 +19,8 @@ export default {
         color: "green"
     },
 
+    agent: {
+        retrainEpisodes: 200,
+    }
+
 };

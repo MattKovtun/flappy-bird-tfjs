@@ -15,26 +15,29 @@ const main = () => {
         const worldState = game.nextFrame.bind(game)();
         const action = agent.act(worldState);
 
-        // game.performAction(action);
+        game.performAction(action);
 
-    }, config.world.speed);
+        if (worldState.gameIsOver) game.startNewGame();
+
+
+    }, config.world.speed); // 200
 };
-// main();
+main();
 
 
-const agentTest = () => {
-    game.startNewGame();
-
-    const worldState = game.nextFrame.bind(game)();
-    const action = agent.act(worldState);
-
-    console.log(action);
-    // game.performAction(action);
-
-
-
-};
-agentTest();
+// const agentTest = () => {
+//     game.startNewGame();
+//
+//     const worldState = game.nextFrame.bind(game)();
+//     const action = agent.act(worldState);
+//
+//     console.log(action);
+//     // game.performAction(action);
+//
+//
+//
+// };
+// agentTest();
 
 
 document.body.addEventListener("keypress", (ev) => {

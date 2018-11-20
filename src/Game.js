@@ -19,6 +19,7 @@ class Game {
 
     gameIsOver() {
         if (this.bird.y >= config.world.height) return true;
+        if (this.bird.y <= 0) return true;
         for (let i = 0; i < this.blocks.length; ++i)
             if (this.blocks[i].collision(this.bird)) return true;
         return false;
@@ -54,11 +55,11 @@ class Game {
 
         this.ticks++;
         const gameStatus = this.gameIsOver();
-        if (gameStatus) this.startNewGame();
         return {
             bird: this.bird,
             blocks: this.blocks,
-            gameIsOver: gameStatus
+            gameIsOver: gameStatus,
+            ticks: this.ticks,
         }
     };
 }

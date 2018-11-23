@@ -21,6 +21,7 @@ export default {
 
     agent: {
         retrainEpisodes: 200,
+        saveEpisodes: 2500
     }
 
 };

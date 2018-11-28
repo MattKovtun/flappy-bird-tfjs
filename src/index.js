@@ -8,12 +8,22 @@ const ctx = canvas.getContext('2d');
 const game = new Game(canvas, ctx);
 const agent = new Agent();
 
+const movementIndicator = document.getElementById("action");
+
 
 const main = () => {
     game.startNewGame();
     setInterval(() => {
         const worldState = game.nextFrame.bind(game)();
         const action = agent.act(worldState);
+
+        if (action) {
+            movementIndicator.classList.remove("arrow_down");
+            movementIndicator.classList.add("arrow_up");
+        } else {
+            movementIndicator.classList.add("arrow_down");
+            movementIndicator.classList.remove("arrow_up");
+        }
 
         game.performAction(action);
 

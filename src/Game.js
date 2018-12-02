@@ -7,6 +7,7 @@ class Game {
     constructor(canvas, ctx) {
         this.ctx = ctx;
         this.canvas = canvas;
+        this.score = 0;
     }
 
     startNewGame() {
@@ -32,12 +33,18 @@ class Game {
 
     moveBlocks() {
         if (this.ticks % config.world.blocksFrequency === 0) this.blocks.push(new Block());
-        this.blocks
-            .filter((el) => el.x >= 0 - config.block.width)
-            .map((el) => {
-                el.render(this.ctx);
-                el.x--;
-            });
+        this.blocks =
+            this.blocks
+                .filter((el) => {
+                    const del = el.x >= 0 - config.block.width;
+                    if (!del) this.score++;
+                    return del;
+                })
+                .map((el) => {
+                    el.render(this.ctx);
+                    el.x--;
+                    return el;
+                });
     }
 
     moveBird() {

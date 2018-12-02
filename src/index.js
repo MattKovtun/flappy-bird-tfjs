@@ -77,7 +77,7 @@ const renderLosses = (losses) => {
     lossInfo.scrollTop = lossInfo.scrollHeight;
 };
 
-const renderInformation = () => {
+const renderInformation = (score) => {
     const numOfEpisodes = episodes.length;
     const currentState = episodes.reduce((a, b) => a + b, 0);
     const avgEpisodeLength = currentState / numOfEpisodes;
@@ -85,7 +85,6 @@ const renderInformation = () => {
                     <span>Avg Episode Length: ${avgEpisodeLength}</span>
                     <span>Number of episodes: ${numOfEpisodes}</span>
                     <span>Current state: ${currentState}</span>`;
-
 
 };
 

@@ -8,6 +8,8 @@ class Block {
         this.x = 320;
         this.y = config.world.height - this.lowerHeight;
         this.width = config.block.width;
+
+        this.passed = false;
     }
 
     collision(object) {

@@ -40,10 +40,26 @@
         border-top: 60px solid #f00;
     }
 
+    #losses {
+        position: absolute;
+        top: 0;
+        left: -110px;
+        width: 210px;
+        height: 100px;
+        background-color: aliceblue;
+        overflow: auto;
+
+    }
+
+    span {
+        display: block;
+    }
+
 
 </style>
 <body>
 <main>
+    <div id="losses"></div>
     <div id="action" class="arrow arrow_up"></div>
     <canvas id="entry-point" width="400" height="400">
     </canvas>

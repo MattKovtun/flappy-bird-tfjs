@@ -2,12 +2,12 @@ import {calcDistance, getRandomInt} from "./utils";
 import config from "./config";
 
 class Agent {
-    constructor() {
+    constructor(saveEpisodes) {
         this.initModel();
         this.history = [];
-        this.retrainEpisodes = config.agent.retrainEpisodes;
-        this.saveEpisodes = config.agent.saveEpisodes;
+        this.saveEpisodes = saveEpisodes;
         this.episode = 0;
+        this.losses = [];
 
     }
 
@@ -26,6 +26,9 @@ class Agent {
     }
 
     async retrainModel() {
+        if (this.history.length >= 2 * this.saveEpisodes) this.history.splice(this.history.length - this.saveEpisodes);
+
+
         let xs = [];
         let ys = [];
         for (let i = 0; i < this.history.length; ++i) {
@@ -39,40 +42,48 @@ class Agent {
 
         const h = await this.model.fit(xs, ys);
         console.log("Loss after Epoch " + " : " + h.history.loss[0]);
+        this.losses.push(h.history.loss[0]);
 
     }
 
-    formatInputs(distanceToBlock, distanceToGround) {
-        return tf.tensor2d([distanceToBlock, distanceToGround], [1, 2])
+
+    calculateReward(gameIsOver) {
+        let reward = 100;
+        if (gameIsOver) reward = -500;
+        return reward
+
+    }
+
+    formModelInputs(bird, blocks) {
+        const distanceToBlock = calcDistance(bird, blocks[0]);
+        const distanceToGround = calcDistance(bird, {x: bird.x, y: config.world.height});
+        return [distanceToBlock, distanceToGround];
     }
 
     act(worldState) {
         this.episode++;
         const {bird, blocks, ticks, gameIsOver} = worldState;
-        let reward = 100;
-        if (gameIsOver) reward = -500;
 
-        const distanceToBlock = calcDistance(bird, blocks[0]);
-        const distanceToGround = calcDistance(bird, {x: bird.x, y: config.world.height});
+        const reward = this.calculateReward(gameIsOver);
 
-
-        const input = this.formatInputs(distanceToBlock, distanceToGround);
-        const prediction = this.modelPredict(input);
+        const input = this.formModelInputs(bird, blocks);
+        const prediction = this.modelPredict(tf.tensor2d(input, [1, 2]));
 
         // prediction.print();
         const action = prediction.argMax(1).dataSync()[0];
         const predictedReward = prediction.max(1).dataSync()[0];
 
 
+        this.history.push([...input, predictedReward, 0, action]);
 
-        this.history.push([distanceToBlock, distanceToGround, predictedReward, 0]);
 
-
-        if (this.episode % this.retrainEpisodes === 0) {
-            if (this.history.length >= 2 * this.saveEpisodes) this.history.splice(this.history.length - this.saveEpisodes);
-            this.retrainModel();
-        }
         if (this.episode > 1) this.history[this.history.length - 1][3] = reward;
+        if (gameIsOver) {
+            for (let i = this.history.length - 1; i >= 0; --i) {
+                this.history[i][3] = reward;
+                if (this.history[i][4] === 1) break
+            }
+        }
 
 
         return action;

@@ -6,14 +6,15 @@ const canvas = document.getElementById("entry-point");
 const ctx = canvas.getContext('2d');
 
 const game = new Game(canvas, ctx);
-const agent = new Agent();
+const agent = new Agent(config.agent.saveEpisodes);
 
 const movementIndicator = document.getElementById("action");
+const lossInfo = document.getElementById("losses");
 
 
 const main = () => {
     game.startNewGame();
-    setInterval(() => {
+    setInterval(async () => {
         const worldState = game.nextFrame.bind(game)();
         const action = agent.act(worldState);
 
@@ -27,7 +28,15 @@ const main = () => {
 
         game.performAction(action);
 
-        if (worldState.gameIsOver) game.startNewGame();
+
+        if (agent.episode % config.agent.retrainEpisodes === 0) {
+            await agent.retrainModel();
+            renderLosses(agent.losses);
+        }
+
+        if (worldState.gameIsOver) {
+            game.startNewGame();
+        }
 
 
     }, config.world.speed); // 200
@@ -55,4 +64,13 @@ document.body.addEventListener("keypress", (ev) => {
     if (ev.charCode === 0) game.startNewGame();
 });
 
+
+const renderLosses = (losses) => {
+    let innerHTML = ``;
+    losses.map((el) => {
+       innerHTML += `<span>Loss: ${el}</span>`
+    });
+    lossInfo.innerHTML = innerHTML;
+    lossInfo.scrollTop = lossInfo.scrollHeight;
+}
 

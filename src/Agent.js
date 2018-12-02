@@ -2,11 +2,11 @@ import {calcDistance, getRandomInt} from "./utils";
 import config from "./config";
 
 class Agent {
-    constructor(saveEpisodes) {
+    constructor(saveStates) {
         this.initModel();
         this.history = [];
-        this.saveEpisodes = saveEpisodes;
-        this.episode = 0;
+        this.saveStates = saveStates;
+        this.state = 0;
         this.losses = [];
 
     }
@@ -26,7 +26,7 @@ class Agent {
     }
 
     async retrainModel() {
-        if (this.history.length >= 2 * this.saveEpisodes) this.history.splice(this.history.length - this.saveEpisodes);
+        if (this.history.length >= 2 * this.saveStates) this.history = this.history.slice(this.history.length - this.saveStates);
 
 
         let xs = [];
@@ -61,7 +61,7 @@ class Agent {
     }
 
     act(worldState) {
-        this.episode++;
+        this.state++;
         const {bird, blocks, ticks, gameIsOver} = worldState;
 
         const reward = this.calculateReward(gameIsOver);
@@ -74,19 +74,26 @@ class Agent {
         const predictedReward = prediction.max(1).dataSync()[0];
 
 
-        this.history.push([...input, predictedReward, 0, action]);
+        this.history.push([...input, predictedReward, reward, action]);
 
-
-        if (this.episode > 1) this.history[this.history.length - 1][3] = reward;
-        if (gameIsOver) {
-            for (let i = this.history.length - 1; i >= 0; --i) {
-                this.history[i][3] = reward;
-                if (this.history[i][4] === 1) break
-            }
-        }
+        this.updateRewards(gameIsOver, reward);
 
 
         return action;
+
+    }
+
+
+    updateRewards(gameIsOver, reward) {
+        if (this.state > 1) this.history[this.history.length - 1][3] = reward;
+        if (gameIsOver) {
+            for (let i = this.history.length - 1; i >= 0; --i) {
+                if (this.history[i][4]) {
+                    this.history[i][3] = reward;
+                    break;
+                }
+            }
+        }
 
     }
 

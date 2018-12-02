@@ -20,8 +20,8 @@ export default {
     },
 
     agent: {
-        retrainEpisodes: 600,
-        saveEpisodes: 4000
+        retrainEpisodes: 8,
+        saveStates: 4000
     }
 
 };

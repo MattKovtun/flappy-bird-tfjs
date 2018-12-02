@@ -6,11 +6,13 @@ const canvas = document.getElementById("entry-point");
 const ctx = canvas.getContext('2d');
 
 const game = new Game(canvas, ctx);
-const agent = new Agent(config.agent.saveEpisodes);
+const agent = new Agent(config.agent.saveStates);
 
 const movementIndicator = document.getElementById("action");
 const lossInfo = document.getElementById("losses");
+const information = document.getElementById("information");
 
+let episodes = [];
 
 const main = () => {
     game.startNewGame();
@@ -28,14 +30,15 @@ const main = () => {
 
         game.performAction(action);
 
-
-        if (agent.episode % config.agent.retrainEpisodes === 0) {
-            await agent.retrainModel();
-            renderLosses(agent.losses);
-        }
-
         if (worldState.gameIsOver) {
+            episodes.push(worldState.ticks);
             game.startNewGame();
+
+            if (episodes.length % config.agent.retrainEpisodes === 0) {
+                await agent.retrainModel();
+                renderLosses(agent.losses);
+                renderInformation();
+            }
         }
 
 
@@ -68,9 +71,21 @@ document.body.addEventListener("keypress", (ev) => {
 const renderLosses = (losses) => {
     let innerHTML = ``;
     losses.map((el) => {
-       innerHTML += `<span>Loss: ${el}</span>`
+        innerHTML += `<span>Loss: ${el}</span>`;
     });
     lossInfo.innerHTML = innerHTML;
     lossInfo.scrollTop = lossInfo.scrollHeight;
-}
+};
+
+const renderInformation = () => {
+    const numOfEpisodes = episodes.length;
+    const currentState = episodes.reduce((a, b) => a + b, 0);
+    const avgEpisodeLength = currentState / numOfEpisodes;
+    information.innerHTML = `
+                    <span>Avg Episode Length: ${avgEpisodeLength}</span>
+                    <span>Number of episodes: ${numOfEpisodes}</span>
+                    <span>Current state: ${currentState}</span>`;
+
+
+};
 

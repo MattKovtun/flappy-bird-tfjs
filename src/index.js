@@ -11,6 +11,7 @@ const agent = new Agent(config.agent.saveStates);
 const movementIndicator = document.getElementById("action");
 const lossInfo = document.getElementById("losses");
 const information = document.getElementById("information");
+const scoreInfo = document.getElementById("score");
 
 let episodes = [];
 
@@ -29,6 +30,8 @@ const main = () => {
         }
 
         game.performAction(action);
+
+        renderScore(game.score);
 
         if (worldState.gameIsOver) {
             episodes.push(worldState.ticks);
@@ -77,7 +80,7 @@ const renderLosses = (losses) => {
     lossInfo.scrollTop = lossInfo.scrollHeight;
 };
 
-const renderInformation = (score) => {
+const renderInformation = () => {
     const numOfEpisodes = episodes.length;
     const currentState = episodes.reduce((a, b) => a + b, 0);
     const avgEpisodeLength = currentState / numOfEpisodes;
@@ -88,3 +91,5 @@ const renderInformation = (score) => {
 
 };
 
+
+const renderScore = (score) => scoreInfo.innerHTML = `Score: ${score}`;

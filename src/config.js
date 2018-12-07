@@ -2,7 +2,7 @@ export default {
     world: {
         height: 400,
         width: 400,
-        speed: 10,
+        speed: 3,
         blocksFrequency: 200,
     },
     bird: {

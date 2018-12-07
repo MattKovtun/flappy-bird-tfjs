@@ -5,7 +5,7 @@ import Agent from "./Agent";
 const canvas = document.getElementById("entry-point");
 const ctx = canvas.getContext('2d');
 
-const game = new Game(canvas, ctx);
+const game = new Game(canvas, ctx).startNewGame();
 const agent = new Agent(config.agent.saveStates);
 
 const movementIndicator = document.getElementById("action");
@@ -14,13 +14,13 @@ const information = document.getElementById("information");
 const scoreInfo = document.getElementById("score");
 
 let episodes = [];
+let playGame = true;
 
-const main = () => {
-    game.startNewGame();
-    setInterval(async () => {
+const main = async () => {
+    while (playGame) {
         const worldState = game.nextFrame.bind(game)();
         const action = agent.act(worldState);
-        const {score} = worldState;
+        const {score, gameIsOver, ticks} = worldState;
 
         if (action) {
             movementIndicator.classList.remove("arrow_down");
@@ -34,21 +34,23 @@ const main = () => {
 
         renderScore(score);
 
-        if (worldState.gameIsOver) {
-            episodes.push(worldState.ticks);
+        if (gameIsOver) {
+            episodes.push(ticks);
             game.startNewGame();
 
             if (episodes.length % config.agent.retrainEpisodes === 0) {
-                await agent.retrainModel();
+                agent.retrainModel();
                 renderLosses(agent.losses);
                 renderInformation();
             }
+
+
         }
+        await new Promise((resolve, reject) => setTimeout(resolve, config.world.speed));
 
+    }
 
-    }, config.world.speed); // 200
 };
-main();
 
 
 // const agentTest = () => {
@@ -94,3 +96,5 @@ const renderInformation = () => {
 
 
 const renderScore = (score) => scoreInfo.innerHTML = `Score: ${score}`;
+
+main();

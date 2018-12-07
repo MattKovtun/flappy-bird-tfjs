@@ -16,6 +16,7 @@ class Game {
         this.current_state = this.bird.jump.length - 1;
         this.ticks = 1;
         this.score = 0;
+        return this;
 
     }
 

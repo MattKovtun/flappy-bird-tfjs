@@ -15,6 +15,7 @@ class Game {
         this.blocks = [new Block().render(this.ctx)];
         this.current_state = this.bird.jump.length - 1;
         this.ticks = 1;
+        this.score = 0;
 
     }
 
@@ -67,6 +68,7 @@ class Game {
             blocks: this.blocks,
             gameIsOver: gameStatus,
             ticks: this.ticks,
+            score: this.score
         }
     };
 }

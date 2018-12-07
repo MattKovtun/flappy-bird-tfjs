@@ -20,6 +20,7 @@ const main = () => {
     setInterval(async () => {
         const worldState = game.nextFrame.bind(game)();
         const action = agent.act(worldState);
+        const {score} = worldState;
 
         if (action) {
             movementIndicator.classList.remove("arrow_down");
@@ -31,7 +32,7 @@ const main = () => {
 
         game.performAction(action);
 
-        renderScore(game.score);
+        renderScore(score);
 
         if (worldState.gameIsOver) {
             episodes.push(worldState.ticks);

@@ -2,7 +2,7 @@ export default {
     world: {
         height: 400,
         width: 400,
-        speed: 3,
+        speed: 5,
         blocksFrequency: 200,
     },
     bird: {
@@ -20,7 +20,7 @@ export default {
     },
 
     agent: {
-        retrainEpisodes: 8,
+        retrainEpisodes: 10,
         saveStates: 4000
     }
 

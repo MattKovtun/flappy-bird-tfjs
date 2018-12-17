@@ -43,25 +43,20 @@ class Game {
                     return del;
                 })
                 .map((el) => {
-                    el.render(this.ctx);
                     el.x--;
                     return el;
                 });
     }
 
     moveBird() {
-        this.bird.render(this.ctx);
         this.bird.y += this.bird.jump[this.current_state];
         this.bird.y += config.bird.fallingSpeed;
         this.current_state = Math.min(this.bird.jump.length - 1, this.current_state + 1);
     }
 
     nextFrame() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
         this.moveBird();
         this.moveBlocks();
-
         this.ticks++;
         const gameStatus = this.gameIsOver();
         return {
@@ -72,6 +67,12 @@ class Game {
             score: this.score
         }
     };
+    renderNextFrame() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.bird.render(this.ctx);
+        this.blocks.map((el) => el.render(this.ctx));
+
+    }
 }
 
 

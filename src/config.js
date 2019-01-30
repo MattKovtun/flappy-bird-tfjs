@@ -21,7 +21,9 @@ export default {
 
     agent: {
         retrainEpisodes: 10,
-        saveStates: 4000
+        saveStates: 4000,
+        explorationRate: 0.99,
+        explorationRateDecay: 0.35,
     }
 
 };

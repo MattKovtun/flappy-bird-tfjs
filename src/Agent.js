@@ -8,6 +8,8 @@ class Agent {
         this.saveStates = saveStates;
         this.state = 0;
         this.losses = [];
+        this.explorationRate = config.agent.explorationRate;
+        this.explorationRateDecay = config.agent.explorationRateDecay;
 
     }
 
@@ -26,6 +28,7 @@ class Agent {
     }
 
     async retrainModel() {
+        this.explorationRate = Math.max(this.explorationRate - this.explorationRate * this.explorationRateDecay, 0.01);
         if (this.history.length >= 2 * this.saveStates) this.history = this.history.slice(this.history.length - this.saveStates);
 
 
@@ -41,7 +44,7 @@ class Agent {
 
 
         const h = await this.model.fit(xs, ys);
-        console.log("Loss after Epoch " + " : " + h.history.loss[0]);
+        // console.log("Loss after Epoch " + " : " + h.history.loss[0]);
         this.losses.push(h.history.loss[0]);
 
     }
@@ -65,22 +68,35 @@ class Agent {
         const {bird, blocks, ticks, gameIsOver} = worldState;
 
         const reward = this.calculateReward(gameIsOver);
-
         const input = this.formModelInputs(bird, blocks);
-        const prediction = this.modelPredict(tf.tensor2d(input, [1, 2]));
 
-        // prediction.print();
-        const action = prediction.argMax(1).dataSync()[0];
-        const predictedReward = prediction.max(1).dataSync()[0];
-
+        const {action, predictedReward} = this.getActionReward(input);
 
         this.history.push([...input, predictedReward, reward, action]);
 
         this.updateRewards(gameIsOver, reward);
 
-
         return action;
+    }
 
+    getActionReward(input) {
+        let action, predictedReward;
+        if (this.randomMove()) {
+            action = getRandomInt(2);
+            predictedReward = 100;
+        }
+        else {
+            const prediction = this.modelPredict(tf.tensor2d(input, [1, 2]));
+            action = prediction.argMax(1).dataSync()[0];
+            predictedReward = prediction.max(1).dataSync()[0];
+        }
+        return {action: action, predictedReward: predictedReward};
+    }
+
+
+    randomMove() {
+        if (this.explorationRate <= 0.01) return false;
+        return Math.random() <= this.explorationRate;
     }
 
 

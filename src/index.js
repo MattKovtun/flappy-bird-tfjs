@@ -22,7 +22,6 @@ let mode = 1;
 const main = async () => {
     while (playGame)
         if (episodes.length >= fastForward) await graphicMode(mode);
-
 };
 
 
@@ -65,7 +64,7 @@ const renderWorldVerbose = (score, action, gameIsOver) => {
 
 const renderInterface = () => {
     renderLosses(agent.losses, lossInfo);
-    renderInformation(episodes, information);
+    renderInformation(episodes, agent.explorationRate, information);
 };
 
 
@@ -81,7 +80,7 @@ document.body.addEventListener("keypress", (ev) => {
     if (ev.charCode === 32) game.performAction(true);
     if (ev.charCode === 0) game.startNewGame();
     if (ev.charCode === 102) fastForward = episodes.length + 10;
-    if (ev.charCode === 51) mode = 3;
+    // if (ev.charCode === 51) mode = 3;
     if (ev.charCode === 49) {
         mode = 1;
         renderInterface();

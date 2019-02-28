@@ -37,7 +37,7 @@ const graphicMode = async (mode) => {
         game.startNewGame();
 
         if (episodes.length % config.agent.retrainEpisodes === 0)
-            if (mode === 3) await agent.retrainModel();
+            if (mode !== 3) await agent.retrainModel();
             else agent.retrainModel();
     }
 

@@ -43,7 +43,7 @@ class Agent {
         ys = tf.tensor2d(ys, [this.history.length, 2]);
 
 
-        const h = await this.model.fit(xs, ys);
+        const h = await this.model.fit(xs, ys, {epochs: 2});
         // console.log("Loss after Epoch " + " : " + h.history.loss[0]);
         this.losses.push(h.history.loss[0]);
 
@@ -58,8 +58,11 @@ class Agent {
     }
 
     formModelInputs(bird, blocks) {
-        const distanceToBlock = calcDistance(bird, blocks[0]);
-        const distanceToGround = calcDistance(bird, {x: bird.x, y: config.world.height});
+
+        // const distanceToBlock = calcDistance(bird, blocks[0]);
+        const distanceToGround = calcDistance(bird, {x: blocks[0].x, y: bird.y});
+        const distanceToBlock = calcDistance(bird, {x: bird.x, y: blocks[0].y});
+
         return [distanceToBlock, distanceToGround];
     }
 

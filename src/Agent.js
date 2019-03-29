@@ -9,7 +9,6 @@ class Agent {
         this.state = 0;
         this.losses = [];
         this.explorationRate = config.agent.explorationRate;
-        this.explorationRateDecay = config.agent.explorationRateDecay;
         this.rewards = [100, -500];
 
     }
@@ -29,7 +28,6 @@ class Agent {
     }
 
     async retrainModel() {
-        this.explorationRate = Math.max(this.explorationRate - this.explorationRate * this.explorationRateDecay, 0.01);
         if (this.history.length >= 2 * this.saveStates)
             this.history = this.history.slice(this.history.length - this.saveStates);
 
@@ -40,13 +38,9 @@ class Agent {
             const element = this.history[i];
             xs.push([element.xOne, element.xTwo]);
             // TODO: what is second reward?
+
             let y = [element.reward, element.reward];
             y[element.action] = element.reward;
-
-            // if (element.reward === this.rewards[1])
-            //     y[(element.action + 1) % 2] = this.rewards[0];
-            // else
-            //     y[(element.action + 1) % 2] = this.rewards[1];
 
             ys.push(y);
         }
@@ -81,7 +75,7 @@ class Agent {
         this.state++;
         const {bird, blocks, ticks, gameIsOver} = worldState;
 
-        const reward = this.calculateReward(gameIsOver, blocks, bird);
+        const reward = this.calculateReward(gameIsOver);
         const input = this.formModelInputs(bird, blocks);
 
         const {action, predictedReward} = this.getActionReward(input);
@@ -114,9 +108,6 @@ class Agent {
 
 
     randomMove() {
-        //TODO : rewrite exploration rate
-        return false;
-        if (this.explorationRate <= 0.01) return false;
         return Math.random() <= this.explorationRate;
     }
 

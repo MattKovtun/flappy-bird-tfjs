@@ -4,6 +4,7 @@ export const calcDistance = (a, b) => Math.sqrt(Math.pow(a.x - b.x, 2) + Math.po
 
 
 export const renderLosses = (losses, entryPoint) => {
+    entryPoint.innerHTML = '';
     const container = document.createElement("div");
     losses.map((el) => {
         const elem = document.createElement("span");

@@ -13,7 +13,7 @@ class Game {
     startNewGame() {
         this.bird = new Bird().render(this.ctx);
         this.blocks = [new Block().render(this.ctx)];
-        this.current_state = this.bird.jump.length - 1;
+        this.currentState = this.bird.jump.length - 1;
         this.ticks = 1;
         this.score = 0;
         return this;
@@ -29,7 +29,7 @@ class Game {
     }
 
     performAction(action) {
-        if (action) this.current_state = 0;
+        if (action) this.currentState = 0;
     }
 
 
@@ -49,9 +49,9 @@ class Game {
     }
 
     moveBird() {
-        this.bird.y += this.bird.jump[this.current_state];
+        this.bird.y += this.bird.jump[this.currentState];
         this.bird.y += config.bird.fallingSpeed;
-        this.current_state = Math.min(this.bird.jump.length - 1, this.current_state + 1);
+        this.currentState = Math.min(this.bird.jump.length - 1, this.currentState + 1);
     }
 
     nextFrame() {

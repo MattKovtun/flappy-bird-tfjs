@@ -10,6 +10,7 @@ class Agent {
         this.losses = [];
         this.explorationRate = config.agent.explorationRate;
         this.explorationRateDecay = config.agent.explorationRateDecay;
+        this.rewards = [100, -500];
 
     }
 
@@ -29,19 +30,29 @@ class Agent {
 
     async retrainModel() {
         this.explorationRate = Math.max(this.explorationRate - this.explorationRate * this.explorationRateDecay, 0.01);
-        if (this.history.length >= 2 * this.saveStates) this.history = this.history.slice(this.history.length - this.saveStates);
+        if (this.history.length >= 2 * this.saveStates)
+            this.history = this.history.slice(this.history.length - this.saveStates);
 
 
         let xs = [];
         let ys = [];
         for (let i = 0; i < this.history.length; ++i) {
             const element = this.history[i];
-            xs.push([element[0], element[1]]);
-            ys.push([element[3], element[3]]);
+            xs.push([element.xOne, element.xTwo]);
+            // TODO: what is second reward?
+            let y = [element.reward, element.reward];
+            y[element.action] = element.reward;
+
+            // if (element.reward === this.rewards[1])
+            //     y[(element.action + 1) % 2] = this.rewards[0];
+            // else
+            //     y[(element.action + 1) % 2] = this.rewards[1];
+
+            ys.push(y);
         }
+
         xs = tf.tensor2d(xs, [this.history.length, 2]);
         ys = tf.tensor2d(ys, [this.history.length, 2]);
-
 
         const h = await this.model.fit(xs, ys, {epochs: 2});
         // console.log("Loss after Epoch " + " : " + h.history.loss[0]);
@@ -51,17 +62,17 @@ class Agent {
 
 
     calculateReward(gameIsOver) {
-        let reward = 100;
-        if (gameIsOver) reward = -500;
+        let reward = this.rewards[0];
+        if (gameIsOver) reward = this.rewards[1];
         return reward
 
     }
 
     formModelInputs(bird, blocks) {
 
-        // const distanceToBlock = calcDistance(bird, blocks[0]);
-        const distanceToGround = calcDistance(bird, {x: blocks[0].x, y: bird.y});
-        const distanceToBlock = calcDistance(bird, {x: bird.x, y: blocks[0].y});
+        const distanceToBlock = calcDistance(bird, blocks[0]);
+        const distanceToGround = calcDistance(bird, {x: bird.x, y: config.world.height});
+        // const distanceToBlock = calcDistance(bird, {x: bird.x, y: blocks[0].y});
 
         return [distanceToBlock, distanceToGround];
     }
@@ -70,12 +81,18 @@ class Agent {
         this.state++;
         const {bird, blocks, ticks, gameIsOver} = worldState;
 
-        const reward = this.calculateReward(gameIsOver);
+        const reward = this.calculateReward(gameIsOver, blocks, bird);
         const input = this.formModelInputs(bird, blocks);
 
         const {action, predictedReward} = this.getActionReward(input);
 
-        this.history.push([...input, predictedReward, reward, action]);
+        this.history.push({
+            xOne: input[0],
+            xTwo: input[1],
+            predictedReward: predictedReward,
+            reward: -1,
+            action: action
+        });
 
         this.updateRewards(gameIsOver, reward);
 
@@ -87,8 +104,7 @@ class Agent {
         if (this.randomMove()) {
             action = getRandomInt(2);
             predictedReward = 100;
-        }
-        else {
+        } else {
             const prediction = this.modelPredict(tf.tensor2d(input, [1, 2]));
             action = prediction.argMax(1).dataSync()[0];
             predictedReward = prediction.max(1).dataSync()[0];
@@ -98,17 +114,20 @@ class Agent {
 
 
     randomMove() {
+        //TODO : rewrite exploration rate
+        return false;
         if (this.explorationRate <= 0.01) return false;
         return Math.random() <= this.explorationRate;
     }
 
 
     updateRewards(gameIsOver, reward) {
-        if (this.state > 1) this.history[this.history.length - 1][3] = reward;
+        // TODO: fix if jump from previous session
+        if (this.state > 1) this.history[this.history.length - 1].reward = reward;
         if (gameIsOver) {
             for (let i = this.history.length - 1; i >= 0; --i) {
-                if (this.history[i][4]) {
-                    this.history[i][3] = reward;
+                if (this.history[i].action) {
+                    this.history[i].reward = reward;
                     break;
                 }
             }

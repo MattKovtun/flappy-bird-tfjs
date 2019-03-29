@@ -54,7 +54,7 @@ class Game {
         this.currentState = Math.min(this.bird.jump.length - 1, this.currentState + 1);
     }
 
-    nextFrame() {
+    getFrame() {
         this.moveBird();
         this.moveBlocks();
         this.ticks++;
@@ -67,7 +67,7 @@ class Game {
             score: this.score
         }
     };
-    renderNextFrame() {
+    renderFrame() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.bird.render(this.ctx);
         this.blocks.map((el) => el.render(this.ctx));

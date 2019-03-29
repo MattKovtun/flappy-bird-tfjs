@@ -18,7 +18,6 @@ class World {
 
         this.episodes = [];
         this.playGame = true;
-        this.fastForward = 0;
         this.mode = 1;
 
     }
@@ -26,12 +25,13 @@ class World {
 
     async main() {
         while (this.playGame)
-            if (this.episodes.length >= this.fastForward) await this.graphicMode(this.mode);
-
+            await this.graphicMode(this.mode);
     }
 
     async graphicMode(mode) {
-        const worldState = this.game.nextFrame();
+        const worldState = this.game.getFrame();
+        this.game.renderFrame();
+
         const action = this.agent.act(worldState);
         const {score, gameIsOver, ticks} = worldState;
         this.game.performAction(action);
@@ -41,8 +41,10 @@ class World {
             this.episodes.push(ticks);
             this.game.startNewGame();
 
-            if (this.episodes.length % config.agent.retrainEpisodes === 0)
+            if (this.episodes.length % config.agent.retrainEpisodes === 0) {
                 await this.agent.retrainModel();
+            }
+
         }
         this.renderWorldVerbose(score, action, gameIsOver);
         await new Promise((resolve, reject) => setTimeout(resolve, config.world.speed));
@@ -58,24 +60,13 @@ class World {
             this.movementIndicator.classList.remove("arrow_up");
         }
 
-        if (gameIsOver && this.episodes.length % config.agent.retrainEpisodes === 0)
-            this.renderInterface();
-        this.renderWorld(score);
+        if (gameIsOver && this.episodes.length % config.agent.retrainEpisodes === 0) {
+            renderLosses(this.agent.losses, this.lossInfo);
+            renderInformation(this.episodes, this.agent.explorationRate, this.information);
+        }
 
-
-    };
-
-    renderInterface() {
-        renderLosses(this.agent.losses, this.lossInfo);
-        renderInformation(this.episodes, this.agent.explorationRate, this.information);
-    };
-
-
-    renderWorld(score) {
         renderScore(score, this.scoreInfo);
-        this.game.renderNextFrame();
     };
-
 
 }
 

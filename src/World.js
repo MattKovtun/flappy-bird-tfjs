@@ -42,13 +42,10 @@ class World {
             this.game.startNewGame();
 
             if (this.episodes.length % config.agent.retrainEpisodes === 0)
-                if (mode !== 3) await this.agent.retrainModel();
-                else this.agent.retrainModel();
+                await this.agent.retrainModel();
         }
-
-        if (mode === 1) this.renderWorldVerbose(score, action, gameIsOver);
-        if (mode === 2) this.renderWorld(score);
-        if (mode !== 3) await new Promise((resolve, reject) => setTimeout(resolve, config.world.speed));
+        this.renderWorldVerbose(score, action, gameIsOver);
+        await new Promise((resolve, reject) => setTimeout(resolve, config.world.speed));
 
     };
 

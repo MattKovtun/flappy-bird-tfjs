@@ -28,7 +28,7 @@ class World {
             await this.graphicMode(this.mode);
     }
 
-    async graphicMode(mode) {
+    async graphicMode() {
         const worldState = this.game.getFrame();
         this.game.renderFrame();
 
@@ -44,21 +44,19 @@ class World {
             if (this.episodes.length % config.agent.retrainEpisodes === 0) {
                 await this.agent.retrainModel();
             }
-
         }
+
         this.renderWorldVerbose(score, action, gameIsOver);
         await new Promise((resolve, reject) => setTimeout(resolve, config.world.speed));
 
     };
 
     renderWorldVerbose(score, action, gameIsOver) {
-        if (action) {
-            this.movementIndicator.classList.remove("arrow_down");
-            this.movementIndicator.classList.add("arrow_up");
-        } else {
-            this.movementIndicator.classList.add("arrow_down");
-            this.movementIndicator.classList.remove("arrow_up");
-        }
+        if (action)
+            this.movementIndicator.classList = ["arrow arrow_up"];
+        else
+            this.movementIndicator.classList = ["arrow arrow_down"];
+
 
         if (gameIsOver && this.episodes.length % config.agent.retrainEpisodes === 0) {
             renderLosses(this.agent.losses, this.lossInfo);

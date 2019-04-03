@@ -13,5 +13,5 @@ main(world);
 
 
 document.addEventListener('keypress', (ev) => {
-    if (ev.keyCode == 32) world.game.performAction(1);
+    if (ev.keyCode === 32) world.game.performAction(1);
 });

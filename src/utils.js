@@ -2,6 +2,8 @@ export const getRandomInt = (max) => Math.floor(Math.random() * Math.floor(max))
 
 export const calcDistance = (a, b) => Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
 
+export const areColliding = (objectOne, objectTwo) => (objectOne.y >= objectTwo.y && objectOne.y <= (objectTwo.y + objectTwo.height)) && (objectOne.x >= objectTwo.x && objectOne.x <= objectTwo.x + objectTwo.width);
+
 
 export const renderLosses = (losses, entryPoint) => {
     entryPoint.innerHTML = '';

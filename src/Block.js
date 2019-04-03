@@ -1,4 +1,5 @@
 import config from "./config";
+import {areColliding} from './utils';
 
 class Block {
     constructor() {
@@ -12,18 +13,13 @@ class Block {
     }
 
     collision(object) {
-        if (this.collide(object, this)) return true;
-        if (this.collide(object, {
-            x: this.x,
-            y: config.world.height - this.height,
-            width: this.width,
-            height: this.height
-        })) return true;
-        return false;
-    }
-
-    collide(objectOne, objectTwo) {
-        return (objectOne.y >= objectTwo.y && objectOne.y <= (objectTwo.y + objectTwo.height)) && (objectOne.x >= objectTwo.x && objectOne.x <= objectTwo.x + objectTwo.width);
+        return areColliding(object, this) ||
+            areColliding(object, {
+                x: this.x,
+                y: config.world.height - this.height,
+                width: this.width,
+                height: this.height
+            })
     }
 
 

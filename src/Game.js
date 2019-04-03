@@ -38,14 +38,11 @@ class Game {
         this.blocks =
             this.blocks
                 .filter((el) => {
-                    const del = el.x >= 0 - config.block.width;
+                    const del = el.upperBlock.x >= 0 - config.block.width;
                     if (!del) this.score++;
                     return del;
                 })
-                .map((el) => {
-                    el.x--;
-                    return el;
-                });
+                .map((el) => el.shiftBlocks());
     }
 
     moveBird() {
@@ -67,6 +64,7 @@ class Game {
             score: this.score
         }
     };
+
     renderFrame() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.bird.render(this.ctx);

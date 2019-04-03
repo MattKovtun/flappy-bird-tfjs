@@ -64,7 +64,7 @@ class Agent {
 
     formModelInputs(bird, blocks) {
 
-        const distanceToBlock = calcDistance(bird, blocks[0]);
+        const distanceToBlock = calcDistance(bird, blocks[0].lowerBlock);
         const distanceToGround = calcDistance(bird, {x: bird.x, y: config.world.height});
         // const distanceToBlock = calcDistance(bird, {x: bird.x, y: blocks[0].y});
 

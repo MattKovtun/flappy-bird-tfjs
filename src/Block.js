@@ -3,31 +3,37 @@ import {areColliding} from './utils';
 
 class Block {
     constructor() {
-        this.upperHeight = config.block.height;
-        this.lowerHeight = config.block.height;
-
-        this.x = 320;
-        this.y = 0;
-        this.width = config.block.width;
-        this.height = config.block.height;
+        this.upperBlock = {
+            y: 0,
+            height: config.block.height,
+            width: config.block.width,
+            x: 320
+        };
+        this.lowerBlock = {
+            y: config.world.height - config.block.height,
+            height: config.block.height,
+            width: config.block.width,
+            x: 320
+        };
     }
 
     collision(object) {
-        return areColliding(object, this) ||
-            areColliding(object, {
-                x: this.x,
-                y: config.world.height - this.height,
-                width: this.width,
-                height: this.height
-            })
+        return areColliding(object, this.upperBlock) ||
+            areColliding(object, this.lowerBlock)
+    }
+
+    shiftBlocks() {
+        this.lowerBlock.x--;
+        this.upperBlock.x--;
+        return this;
     }
 
 
     render(ctx) {
         ctx.beginPath();
         ctx.fillStyle = config.block.color;
-        ctx.fillRect(this.x, this.y, this.width, this.upperHeight);
-        ctx.fillRect(this.x, config.world.height - this.lowerHeight, this.width, this.lowerHeight);
+        ctx.fillRect(this.upperBlock.x, this.upperBlock.y, this.upperBlock.width, this.upperBlock.height);
+        ctx.fillRect(this.lowerBlock.x, this.lowerBlock.y, this.lowerBlock.width, this.lowerBlock.height);
         return this;
     }
 }

@@ -6,21 +6,32 @@ class Block {
         this.lowerHeight = config.block.height;
 
         this.x = 320;
-        this.y = config.world.height - this.lowerHeight;
+        this.y = 0;
         this.width = config.block.width;
+        this.height = config.block.height;
     }
 
     collision(object) {
-        if (object.y <= this.upperHeight && (object.x >= this.x && object.x <= this.x + this.width)) return true;
-        if (object.y >= config.world.height - this.lowerHeight && (object.x >= this.x && object.x <= this.x + this.width)) return true;
+        if (this.collide(object, this)) return true;
+        if (this.collide(object, {
+            x: this.x,
+            y: config.world.height - this.height,
+            width: this.width,
+            height: this.height
+        })) return true;
         return false;
     }
+
+    collide(objectOne, objectTwo) {
+        return (objectOne.y >= objectTwo.y && objectOne.y <= (objectTwo.y + objectTwo.height)) && (objectOne.x >= objectTwo.x && objectOne.x <= objectTwo.x + objectTwo.width);
+    }
+
 
     render(ctx) {
         ctx.beginPath();
         ctx.fillStyle = config.block.color;
-        ctx.fillRect(this.x, 0, this.width, this.upperHeight);
-        ctx.fillRect(this.x, this.y, this.width, this.lowerHeight);
+        ctx.fillRect(this.x, this.y, this.width, this.upperHeight);
+        ctx.fillRect(this.x, config.world.height - this.lowerHeight, this.width, this.lowerHeight);
         return this;
     }
 }

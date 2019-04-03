@@ -88,7 +88,7 @@ class Agent {
             action: action
         });
 
-        this.updateRewards(gameIsOver, reward);
+        this.updateRewards(gameIsOver, reward, ticks);
 
         return action;
     }
@@ -112,12 +112,12 @@ class Agent {
     }
 
 
-    updateRewards(gameIsOver, reward) {
-        // TODO: fix if jump from previous session
+    updateRewards(gameIsOver, reward, ticks) {
+        // TODO: fix if jump from previous session, which jumps prevent?
         if (this.state > 1) this.history[this.history.length - 1].reward = reward;
         if (gameIsOver) {
-            for (let i = this.history.length - 1; i >= 0; --i) {
-                if (this.history[i].action) {
+            for (let i = 1; i <= ticks - 2; ++i) {
+                if (this.history[this.history.length - i].action) {
                     this.history[i].reward = reward;
                     break;
                 }

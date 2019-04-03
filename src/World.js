@@ -23,11 +23,6 @@ class World {
     }
 
 
-    async main() {
-        while (this.playGame)
-            await this.graphicMode(this.mode);
-    }
-
     async graphicMode() {
         const worldState = this.game.getFrame();
         this.game.renderFrame();

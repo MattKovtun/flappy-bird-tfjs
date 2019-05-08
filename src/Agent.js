@@ -36,7 +36,7 @@ class Agent {
         let ys = [];
         for (let i = 0; i < this.history.length; ++i) {
             const element = this.history[i];
-            xs.push([element.xOne, element.xTwo]);
+            xs.push(element.state);
             // TODO: what is second reward?
 
             let y = [0, 0];
@@ -81,11 +81,11 @@ class Agent {
         const {action, predictedReward} = this.getActionReward(input);
 
         this.history.push({
-            xOne: input[0],
-            xTwo: input[1],
+            state: input,
             predictedReward: predictedReward,
             reward: -1,
-            action: action
+            action: action,
+            gameIsOver: gameIsOver
         });
 
         this.updateRewards(gameIsOver, reward, ticks);
@@ -95,7 +95,7 @@ class Agent {
 
     getActionReward(input) {
         if (this.randomMove())
-            return {action: getRandomInt(2), predictedReward: this.rewards[0]};
+            return {action: getRandomInt(2), predictedReward: -1};
 
         const prediction = this.modelPredict(tf.tensor2d(input, [1, 2]));
         const action = prediction.argMax(1).dataSync()[0];
@@ -112,15 +112,16 @@ class Agent {
 
     updateRewards(gameIsOver, reward, ticks) {
         // TODO: fix if jump from previous session, which jumps prevent?
-        if (this.state > 1) this.history[this.history.length - 1].reward = reward;
-        if (gameIsOver) {
-            for (let i = 1; i <= ticks - 2; ++i) {
-                if (this.history[this.history.length - i].action) {
-                    this.history[i].reward = reward;
-                    break;
-                }
-            }
-        }
+        // console.log("ad")
+        if (this.state > 1) this.history[this.history.length - 2].reward = reward;
+        // if (gameIsOver) {
+        //     for (let i = 1; i <= ticks - 2; ++i) {
+        //         if (this.history[this.history.length - i].action) {
+        //             this.history[i].reward = reward;
+        //             break;
+        //         }
+        //     }
+        // }
 
     }
 

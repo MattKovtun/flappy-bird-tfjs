@@ -9,7 +9,7 @@ class Agent {
         this.state = 0;
         this.losses = [];
         this.explorationRate = config.agent.explorationRate;
-        this.rewards = [100, -500];
+        this.rewards = [10, -10];
 
     }
 
@@ -39,7 +39,7 @@ class Agent {
             xs.push([element.xOne, element.xTwo]);
             // TODO: what is second reward?
 
-            let y = [element.reward, element.reward];
+            let y = [0, 0];
             y[element.action] = element.reward;
 
             ys.push(y);
@@ -94,15 +94,13 @@ class Agent {
     }
 
     getActionReward(input) {
-        let action, predictedReward;
-        if (this.randomMove()) {
-            action = getRandomInt(2);
-            predictedReward = 100;
-        } else {
-            const prediction = this.modelPredict(tf.tensor2d(input, [1, 2]));
-            action = prediction.argMax(1).dataSync()[0];
-            predictedReward = prediction.max(1).dataSync()[0];
-        }
+        if (this.randomMove())
+            return {action: getRandomInt(2), predictedReward: this.rewards[0]};
+
+        const prediction = this.modelPredict(tf.tensor2d(input, [1, 2]));
+        const action = prediction.argMax(1).dataSync()[0];
+        const predictedReward = prediction.max(1).dataSync()[0];
+
         return {action: action, predictedReward: predictedReward};
     }
 

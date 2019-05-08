@@ -114,7 +114,7 @@ class Agent {
 
     updateRewards(gameIsOver, reward, ticks) {
         // TODO: fix if jump from previous session, which jumps prevent?
-        if (this.state > 1) this.history[this.history.length - 1].reward = reward;
+        if (this.state > 1) this.history[this.history.length - 2].reward = reward;
         if (gameIsOver) {
             for (let i = 1; i <= ticks - 2; ++i) {
                 if (this.history[this.history.length - i].action) {

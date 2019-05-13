@@ -35,15 +35,10 @@ class World {
             this.game.performAction(action);
         }
 
-        // console.log(birdJump);
 
         if (gameIsOver) {
             this.episodes.push(ticks);
             this.game.startNewGame();
-
-            if (this.episodes.length % config.agent.retrainEpisodes === 0) {
-                // await this.agent.retrainModel();
-            }
 
         }
         //

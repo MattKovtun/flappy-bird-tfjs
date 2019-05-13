@@ -79,7 +79,6 @@ class Agent {
 
 
         for (let block of blocks) {
-
             if (block.lowerBlock.x + block.lowerBlock.width >= bird.x) {
                 frontBlock = block;
                 break
@@ -94,8 +93,6 @@ class Agent {
         });  // distances are ints
 
 
-        // const distanceToBlock = calcDistance(bird, {x: bird.x, y: blocks[0].y});
-        // console.log([distanceToBlockVert, distanceToBlockHoriz]);
         return [distanceToBlockVert, distanceToBlockHoriz];
     }
 

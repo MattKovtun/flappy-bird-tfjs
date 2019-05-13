@@ -1,17 +1,20 @@
 import config from "./config";
-import {areColliding} from './utils';
+import {areColliding, getRandomInt} from './utils';
+
 
 class Block {
     constructor() {
+        // TODO: refactor
+        const a = getRandomInt(50) - 35;
         this.upperBlock = {
             y: 0,
-            height: config.block.height,
+            height: config.block.height - a,
             width: config.block.width,
             x: 320
         };
         this.lowerBlock = {
-            y: config.world.height - config.block.height,
-            height: config.block.height,
+            y: config.world.height - config.block.height - a,
+            height: config.block.height + a,
             width: config.block.width,
             x: 320
         };

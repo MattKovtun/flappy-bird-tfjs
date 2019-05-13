@@ -1,6 +1,7 @@
 import config from "./config.js";
 import Block from "./Block.js";
 import Bird from "./Bird.js";
+import {getRandomInt} from "./utils";
 
 
 class Game {
@@ -35,7 +36,7 @@ class Game {
 
 
     moveBlocks() {
-        if (this.blocks[0].lowerBlock.x <= 150 && this.blocks.length < 2) this.blocks.push(new Block());
+        if (this.blocks[0].lowerBlock.x <= 125 + getRandomInt(30) && this.blocks.length < 2) this.blocks.push(new Block());
         this.blocks =
             this.blocks
                 .filter((el) => {

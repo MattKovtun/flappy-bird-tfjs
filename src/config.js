@@ -16,12 +16,11 @@ export default {
     },
     block: {
         width: 85,
-        height: 105,
+        height: 150,
         color: "green"
     },
 
     agent: {
-        retrainEpisodes: 10,
         saveStates: 2000,
         explorationRate: 0.001,
         explorationRateDecay: 0.35,

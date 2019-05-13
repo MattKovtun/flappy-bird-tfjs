@@ -9,7 +9,7 @@ class Agent {
         this.state = 0;
         this.losses = [];
         this.explorationRate = config.agent.explorationRate;
-        this.rewards = [10, -10];
+        this.rewards = [10, -300];
         this.batch = config.agent.batch;
 
     }
@@ -19,8 +19,9 @@ class Agent {
 
         this.model = tf.sequential();
         this.model.add(tf.layers.dense({units: 4, inputShape: [2]}));
+        this.model.add(tf.layers.dense({units: 4}));
         this.model.add(tf.layers.dense({units: 2}));
-        this.model.compile({loss: 'meanSquaredError', optimizer: tf.train.adam()});
+        this.model.compile({loss: 'meanSquaredError', optimizer: tf.train.adam(0.1 /* learningRate */)});
 
     }
 
@@ -38,10 +39,8 @@ class Agent {
 
         let xs = [];
         let ys = [];
-        const batchIndex = getRandomInt(this.history.length - 1 - this.batch);
-
-        for (let i = batchIndex; i < batchIndex + this.batch; ++i) {
-            const element = this.history[i];
+        for (let i = Math.min(this.batch, this.history.length - 1); i >= 0; --i) {
+            const element = this.history[this.history.length - 1 - i];
             xs.push(element.state);
             // TODO: what is second reward?
 
@@ -49,18 +48,20 @@ class Agent {
 
             y[element.action] = element.reward;
             // if (!element.gameIsOver) {
-            console.log(element);
+            // console.log(element);
             //     y[element.action] += 0.5 * this.modelPredict(element.nextState);
             // }
 
 
             ys.push(y);
         }
-        xs = tf.tensor2d(xs, [this.batch, 2]);
-        ys = tf.tensor2d(ys, [this.batch, 2]);
+
+        xs = tf.tensor2d(xs, [xs.length, 2]);
+        ys = tf.tensor2d(ys, [ys.length, 2]);
+
 
         const h = await this.model.fit(xs, ys, {epochs: 1});
-        // console.log("Loss after Epoch " + " : " + h.history.loss[0]);
+        console.log("Loss after Epoch " + " : " + h.history.loss[0]);
         this.losses.push(h.history.loss[0]);
 
     }
@@ -120,7 +121,7 @@ class Agent {
         }
 
 
-        this.updatePrevState(gameIsOver, reward, state);
+        this.updatePrevState(gameIsOver, reward, state, ticks);
 
         return action;
     }
@@ -138,9 +139,10 @@ class Agent {
     }
 
 
-    updatePrevState(gameIsOver, reward, state) {
-        // TODO: fix if jump from previous session, which jumps prevent?
+    updatePrevState(gameIsOver, reward, state, ticks) {
         if (this.state <= 1) return;
+
+        if (ticks === 1) return;
 
         let prevState = this.history.length - 2;
         if (gameIsOver) prevState = this.history.length - 1;

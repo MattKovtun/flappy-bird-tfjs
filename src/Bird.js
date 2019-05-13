@@ -16,6 +16,7 @@ class Bird {
         ctx.fillStyle = config.bird.color;
         ctx.arc(this.x, this.y, config.bird.height, 0, 2 * Math.PI);
         ctx.fill();
+
         return this;
     }
 }

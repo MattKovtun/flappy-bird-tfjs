@@ -23,8 +23,8 @@ class Block {
     }
 
     shiftBlocks() {
-        this.lowerBlock.x--;
-        this.upperBlock.x--;
+        this.lowerBlock.x -= config.world.ms;
+        this.upperBlock.x -= config.world.ms;
         return this;
     }
 

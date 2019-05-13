@@ -1,6 +1,7 @@
 import config from "./config.js";
 import Block from "./Block.js";
 import Bird from "./Bird.js";
+import {getRandomInt} from "./utils";
 
 
 class Game {
@@ -8,13 +9,14 @@ class Game {
         this.ctx = ctx;
         this.canvas = canvas;
         this.score = 0;
+        this.birdJump = false;
     }
 
     startNewGame() {
         this.bird = new Bird().render(this.ctx);
         this.blocks = [new Block().render(this.ctx)];
         this.currentState = this.bird.jump.length - 1;
-        this.ticks = 1;
+        this.ticks = 0;
         this.score = 0;
         return this;
 
@@ -34,7 +36,7 @@ class Game {
 
 
     moveBlocks() {
-        if (this.ticks % config.world.blocksFrequency === 0) this.blocks.push(new Block());
+        if (this.blocks[0].lowerBlock.x <= 125 + getRandomInt(30) && this.blocks.length < 2) this.blocks.push(new Block());
         this.blocks =
             this.blocks
                 .filter((el) => {
@@ -49,6 +51,8 @@ class Game {
         this.bird.y += this.bird.jump[this.currentState];
         this.bird.y += config.bird.fallingSpeed;
         this.currentState = Math.min(this.bird.jump.length - 1, this.currentState + 1);
+        this.birdJump = (this.currentState !== this.bird.jump.length - 1);
+
     }
 
     getFrame() {
@@ -61,7 +65,8 @@ class Game {
             blocks: this.blocks,
             gameIsOver: gameStatus,
             ticks: this.ticks,
-            score: this.score
+            score: this.score,
+            birdJump: this.birdJump
         }
     };
 

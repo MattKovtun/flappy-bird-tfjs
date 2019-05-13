@@ -27,19 +27,30 @@ class World {
         const worldState = this.game.getFrame();
         this.game.renderFrame();
 
-        const action = this.agent.act(worldState);
-        const {score, gameIsOver, ticks} = worldState;
-        this.game.performAction(action);
+        const {score, gameIsOver, ticks, birdJump} = worldState;
+
+        let action = 0;
+        if (!birdJump || gameIsOver) {
+            action = this.agent.act(worldState);
+            this.game.performAction(action);
+        }
 
 
         if (gameIsOver) {
             this.episodes.push(ticks);
             this.game.startNewGame();
 
-            if (this.episodes.length % config.agent.retrainEpisodes === 0) {
-                await this.agent.retrainModel();
-            }
         }
+        //
+        // if (this.agent.state >= 2000) {
+        //     console.log(this.agent.history);
+        //     console.log(sad);
+        // }
+
+        if (this.agent.state >  100 && gameIsOver) {
+            await this.agent.retrainModel();
+        }
+
 
         this.renderWorldVerbose(score, action, gameIsOver);
         await new Promise((resolve, reject) => setTimeout(resolve, config.world.speed));

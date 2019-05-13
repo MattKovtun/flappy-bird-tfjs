@@ -9,7 +9,8 @@ class Agent {
         this.state = 0;
         this.losses = [];
         this.explorationRate = config.agent.explorationRate;
-        this.rewards = [100, -500];
+        this.rewards = [10, -300];
+        this.batch = config.agent.batch;
 
     }
 
@@ -18,13 +19,17 @@ class Agent {
 
         this.model = tf.sequential();
         this.model.add(tf.layers.dense({units: 4, inputShape: [2]}));
+        this.model.add(tf.layers.dense({units: 4}));
         this.model.add(tf.layers.dense({units: 2}));
-        this.model.compile({loss: 'meanSquaredError', optimizer: tf.train.adam()});
+        this.model.compile({loss: 'meanSquaredError', optimizer: tf.train.adam(0.1 /* learningRate */)});
 
     }
 
     modelPredict(input) {
-        return this.model.predict(input);
+        const prediction = this.model.predict((tf.tensor2d(input, [1, 2])));
+        const action = prediction.argMax(1).dataSync()[0];
+        const predictedReward = prediction.max(1).dataSync()[0];
+        return {action: action, predictedReward: predictedReward};
     }
 
     async retrainModel() {
@@ -34,22 +39,29 @@ class Agent {
 
         let xs = [];
         let ys = [];
-        for (let i = 0; i < this.history.length; ++i) {
-            const element = this.history[i];
-            xs.push([element.xOne, element.xTwo]);
+        for (let i = Math.min(this.batch, this.history.length - 1); i >= 0; --i) {
+            const element = this.history[this.history.length - 1 - i];
+            xs.push(element.state);
             // TODO: what is second reward?
 
-            let y = [element.reward, element.reward];
+            let y = [0, 0];
+
             y[element.action] = element.reward;
+            // if (!element.gameIsOver) {
+            // console.log(element);
+            //     y[element.action] += 0.5 * this.modelPredict(element.nextState);
+            // }
+
 
             ys.push(y);
         }
 
-        xs = tf.tensor2d(xs, [this.history.length, 2]);
-        ys = tf.tensor2d(ys, [this.history.length, 2]);
+        xs = tf.tensor2d(xs, [xs.length, 2]);
+        ys = tf.tensor2d(ys, [ys.length, 2]);
 
-        const h = await this.model.fit(xs, ys, {epochs: 2});
-        // console.log("Loss after Epoch " + " : " + h.history.loss[0]);
+
+        const h = await this.model.fit(xs, ys, {epochs: 1});
+        console.log("Loss after Epoch " + " : " + h.history.loss[0]);
         this.losses.push(h.history.loss[0]);
 
     }
@@ -63,12 +75,25 @@ class Agent {
     }
 
     formModelInputs(bird, blocks) {
+        let frontBlock;
 
-        const distanceToBlock = calcDistance(bird, blocks[0].lowerBlock);
-        const distanceToGround = calcDistance(bird, {x: bird.x, y: config.world.height});
-        // const distanceToBlock = calcDistance(bird, {x: bird.x, y: blocks[0].y});
 
-        return [distanceToBlock, distanceToGround];
+        for (let block of blocks) {
+            if (block.lowerBlock.x + block.lowerBlock.width >= bird.x) {
+                frontBlock = block;
+                break
+            }
+        }
+
+
+        const distanceToBlockVert = calcDistance(bird, {x: bird.x, y: frontBlock.lowerBlock.y});
+        const distanceToBlockHoriz = calcDistance(bird, {
+            x: frontBlock.lowerBlock.x + frontBlock.lowerBlock.width,
+            y: bird.y
+        });  // distances are ints
+
+
+        return [distanceToBlockVert, distanceToBlockHoriz];
     }
 
     act(worldState) {
@@ -77,33 +102,32 @@ class Agent {
 
         const reward = this.calculateReward(gameIsOver);
         const input = this.formModelInputs(bird, blocks);
+        const state = input;
 
         const {action, predictedReward} = this.getActionReward(input);
 
-        this.history.push({
-            xOne: input[0],
-            xTwo: input[1],
-            predictedReward: predictedReward,
-            reward: -1,
-            action: action
-        });
+        if (!gameIsOver) {
+            this.history.push({
+                state: state,
+                predictedReward: predictedReward,
+                action: action,
+                reward: -1,
+                gameIsOver: -1,
+                nextState: -1
+            });
+        }
 
-        this.updateRewards(gameIsOver, reward, ticks);
+
+        this.updatePrevState(gameIsOver, reward, state, ticks);
 
         return action;
     }
 
-    getActionReward(input) {
-        let action, predictedReward;
-        if (this.randomMove()) {
-            action = getRandomInt(2);
-            predictedReward = 100;
-        } else {
-            const prediction = this.modelPredict(tf.tensor2d(input, [1, 2]));
-            action = prediction.argMax(1).dataSync()[0];
-            predictedReward = prediction.max(1).dataSync()[0];
-        }
-        return {action: action, predictedReward: predictedReward};
+    getActionReward(state) {
+        if (this.randomMove())
+            return {action: getRandomInt(2), predictedReward: -1};
+
+        return this.modelPredict(state);
     }
 
 
@@ -112,6 +136,7 @@ class Agent {
     }
 
 
+<<<<<<< HEAD
     updateRewards(gameIsOver, reward, ticks) {
         // TODO: fix if jump from previous session, which jumps prevent?
         if (this.state > 1) this.history[this.history.length - 2].reward = reward;
@@ -123,6 +148,21 @@ class Agent {
                 }
             }
         }
+=======
+    updatePrevState(gameIsOver, reward, state, ticks) {
+        if (this.state <= 1) return;
+
+        if (ticks === 1) return;
+
+        let prevState = this.history.length - 2;
+        if (gameIsOver) prevState = this.history.length - 1;
+
+
+        this.history[prevState].reward = reward;
+        this.history[prevState].nextState = state;
+        this.history[prevState].gameIsOver = gameIsOver;
+
+>>>>>>> migration_to_sars
 
     }
 

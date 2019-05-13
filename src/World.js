@@ -37,9 +37,14 @@ class World {
             this.game.startNewGame();
 
             if (this.episodes.length % config.agent.retrainEpisodes === 0) {
-                await this.agent.retrainModel();
+                // await this.agent.retrainModel();
             }
+
         }
+
+        if (this.agent.state > 2 * this.agent.batch && gameIsOver) await this.agent.retrainModel();
+
+
 
         this.renderWorldVerbose(score, action, gameIsOver);
         await new Promise((resolve, reject) => setTimeout(resolve, config.world.speed));

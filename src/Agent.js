@@ -135,20 +135,6 @@ class Agent {
         return Math.random() <= this.explorationRate;
     }
 
-
-<<<<<<< HEAD
-    updateRewards(gameIsOver, reward, ticks) {
-        // TODO: fix if jump from previous session, which jumps prevent?
-        if (this.state > 1) this.history[this.history.length - 2].reward = reward;
-        if (gameIsOver) {
-            for (let i = 1; i <= ticks - 2; ++i) {
-                if (this.history[this.history.length - i].action) {
-                    this.history[i].reward = reward;
-                    break;
-                }
-            }
-        }
-=======
     updatePrevState(gameIsOver, reward, state, ticks) {
         if (this.state <= 1) return;
 
@@ -161,8 +147,6 @@ class Agent {
         this.history[prevState].reward = reward;
         this.history[prevState].nextState = state;
         this.history[prevState].gameIsOver = gameIsOver;
-
->>>>>>> migration_to_sars
 
     }
 

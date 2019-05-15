@@ -21,7 +21,7 @@ export default {
     },
 
     agent: {
-        saveStates: 2000,
+        saveStates: 2500,
         explorationRate: 0.001,
         explorationRateDecay: 0.35,
         batch: 1000,

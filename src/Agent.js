@@ -61,7 +61,7 @@ class Agent {
 
 
         const h = await this.model.fit(xs, ys, {epochs: 1});
-        console.log("Loss after Epoch " + " : " + h.history.loss[0]);
+        // console.log("Loss after Epoch " + " : " + h.history.loss[0]);
         this.losses.push(h.history.loss[0]);
 
     }
@@ -86,7 +86,10 @@ class Agent {
         }
 
 
-        const distanceToBlockVert = calcDistance(bird, {x: bird.x, y: frontBlock.lowerBlock.y});
+        // const distanceToBlockVert = calcDistance(bird, {x: bird.x, y: frontBlock.lowerBlock.y});
+        const distanceToBlockVert = bird.y - frontBlock.lowerBlock.y;
+
+
         const distanceToBlockHoriz = calcDistance(bird, {
             x: frontBlock.lowerBlock.x + frontBlock.lowerBlock.width,
             y: bird.y

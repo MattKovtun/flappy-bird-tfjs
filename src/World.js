@@ -19,6 +19,7 @@ class World {
         this.episodes = [];
         this.playGame = true;
         this.mode = 1;
+        this.scores = [];
 
     }
 
@@ -64,11 +65,15 @@ class World {
             this.movementIndicator.classList = ["arrow arrow_down"];
 
 
-        if (gameIsOver && this.episodes.length % config.agent.retrainEpisodes === 0) {
+        if (gameIsOver) {
             renderLosses(this.agent.losses, this.lossInfo);
             renderInformation(this.episodes, this.agent.explorationRate, this.information);
+            this.scores.push(score);
         }
-
+        if (score === 50) {
+            console.log(this.scores);
+            console.log(this.agent.losses);
+        }
         renderScore(score, this.scoreInfo);
     };
 

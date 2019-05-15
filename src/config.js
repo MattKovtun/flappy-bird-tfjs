@@ -1,4 +1,5 @@
 export default {
+    //TODO: optimize, remove old vars
     world: {
         height: 400,
         width: 400,

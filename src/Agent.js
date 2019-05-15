@@ -15,6 +15,7 @@ class Agent {
     }
 
     initModel() {
+        //TODO: test different losses, architectures
         // const lossFn = (pred, label) => pred.sub(label).square().mean();
 
         this.model = tf.sequential();
@@ -42,15 +43,11 @@ class Agent {
         for (let i = Math.min(this.batch, this.history.length - 1); i >= 0; --i) {
             const element = this.history[this.history.length - 1 - i];
             xs.push(element.state);
-            // TODO: what is second reward?
 
             let y = [0, 0];
 
+
             y[element.action] = element.reward;
-            // if (!element.gameIsOver) {
-            // console.log(element);
-            //     y[element.action] += 0.5 * this.modelPredict(element.nextState);
-            // }
 
 
             ys.push(y);
@@ -86,7 +83,6 @@ class Agent {
         }
 
 
-        // const distanceToBlockVert = calcDistance(bird, {x: bird.x, y: frontBlock.lowerBlock.y});
         const distanceToBlockVert = bird.y - frontBlock.lowerBlock.y;
 
 
@@ -139,6 +135,7 @@ class Agent {
     }
 
     updatePrevState(gameIsOver, reward, state, ticks) {
+        // TODO: rewrite ticks
         if (this.state <= 1) return;
 
         if (ticks === 1) return;

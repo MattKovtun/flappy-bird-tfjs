@@ -48,6 +48,7 @@ class World {
         //     console.log(sad);
         // }
 
+        // TODO: move to config
         if (this.agent.state >  100 && gameIsOver) {
             await this.agent.retrainModel();
         }

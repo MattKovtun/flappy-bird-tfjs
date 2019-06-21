@@ -36,7 +36,7 @@ class Game {
 
 
     moveBlocks() {
-        if (this.blocks[0].lowerBlock.x <= 125 + getRandomInt(30) && this.blocks.length < 2) this.blocks.push(new Block());
+        if (this.blocks[0].lowerBlock.x <= config.world.nextBlockX + getRandomInt(config.world.widthRandomness) && this.blocks.length < 2) this.blocks.push(new Block());
         this.blocks =
             this.blocks
                 .filter((el) => {

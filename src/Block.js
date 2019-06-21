@@ -4,17 +4,16 @@ import {areColliding, getRandomInt} from './utils';
 
 class Block {
     constructor() {
-        // TODO: refactor
-        const a = getRandomInt(50) - 35;
+        const heightRandomness = getRandomInt(config.world.heightRandomness) - config.world.heightRandomness * 0.5;
         this.upperBlock = {
             y: 0,
-            height: config.block.height - a,
+            height: config.block.height - heightRandomness,
             width: config.block.width,
             x: 320
         };
         this.lowerBlock = {
-            y: config.world.height - config.block.height - a,
-            height: config.block.height + a,
+            y: config.world.height - config.block.height - heightRandomness,
+            height: config.block.height + heightRandomness,
             width: config.block.width,
             x: 320
         };

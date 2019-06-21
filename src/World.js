@@ -42,16 +42,16 @@ class World {
             this.game.startNewGame();
 
         }
+
+        // TODO: move to config
+        if (this.agent.state > 100 && gameIsOver) {
+            await this.agent.retrainModel();
+        }
         //
         // if (this.agent.state >= 2000) {
         //     console.log(this.agent.history);
         //     console.log(sad);
         // }
-
-        // TODO: move to config
-        if (this.agent.state >  100 && gameIsOver) {
-            await this.agent.retrainModel();
-        }
 
 
         this.renderWorldVerbose(score, action, gameIsOver);

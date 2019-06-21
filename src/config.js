@@ -6,6 +6,9 @@ export default {
         speed: 1,
         blocksFrequency: 200,
         ms: 2,
+        heightRandomness: 50,
+        widthRandomness: 30,
+        nextBlockX: 125
     },
     bird: {
         width: 15,
@@ -17,7 +20,7 @@ export default {
     },
     block: {
         width: 85,
-        height: 150,
+        height: 170,
         color: "green"
     },
 
@@ -25,7 +28,8 @@ export default {
         saveStates: 2500,
         explorationRate: 0.001,
         explorationRateDecay: 0.35,
-        batch: 1000,
+        batch: 2000,
+        learningRate: 0.1
     }
 
 };

@@ -22,7 +22,7 @@ class Agent {
         this.model.add(tf.layers.dense({units: 4, inputShape: [2]}));
         this.model.add(tf.layers.dense({units: 4}));
         this.model.add(tf.layers.dense({units: 2}));
-        this.model.compile({loss: 'meanSquaredError', optimizer: tf.train.adam(0.1 /* learningRate */)});
+        this.model.compile({loss: 'meanSquaredError', optimizer: tf.train.adam(config.agent.learningRate)});
 
     }
 
@@ -73,8 +73,6 @@ class Agent {
 
     formModelInputs(bird, blocks) {
         let frontBlock;
-
-
         for (let block of blocks) {
             if (block.lowerBlock.x + block.lowerBlock.width >= bird.x) {
                 frontBlock = block;

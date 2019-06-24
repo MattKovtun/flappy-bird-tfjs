@@ -6,22 +6,22 @@ class Block {
     constructor() {
         const heightRandomness = getRandomInt(config.world.heightRandomness) - config.world.heightRandomness * 0.5;
         this.upperBlock = {
-            y: 0,
             height: config.block.height - heightRandomness,
             width: config.block.width,
-            x: 320
+            x: config.block.blockInitialX,
+            y: config.block.blockInitialY
         };
         this.lowerBlock = {
             y: config.world.height - config.block.height - heightRandomness,
             height: config.block.height + heightRandomness,
             width: config.block.width,
-            x: 320
+            x: config.block.blockInitialX
         };
     }
 
     collision(object) {
         return areColliding(object, this.upperBlock) ||
-            areColliding(object, this.lowerBlock)
+            areColliding(object, this.lowerBlock);
     }
 
     shiftBlocks() {

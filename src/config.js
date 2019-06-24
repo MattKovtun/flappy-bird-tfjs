@@ -8,7 +8,8 @@ export default {
         ms: 2,
         heightRandomness: 50,
         widthRandomness: 30,
-        nextBlockX: 125
+        nextBlockX: 125,
+
     },
     bird: {
         width: 15,
@@ -21,7 +22,9 @@ export default {
     block: {
         width: 85,
         height: 170,
-        color: "green"
+        color: "green",
+        blockInitialX: 320,
+        blockInitialY: 0
     },
 
     agent: {

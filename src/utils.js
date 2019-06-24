@@ -5,6 +5,7 @@ export const calcDistance = (a, b) => Math.sqrt(Math.pow(a.x - b.x, 2) + Math.po
 export const areColliding = (objectOne, objectTwo) => (objectOne.y >= objectTwo.y && objectOne.y <= (objectTwo.y + objectTwo.height)) && (objectOne.x >= objectTwo.x && objectOne.x <= objectTwo.x + objectTwo.width);
 
 
+
 export const renderLosses = (losses, entryPoint) => {
     entryPoint.innerHTML = '';
     const container = document.createElement("div");

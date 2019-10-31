@@ -32,7 +32,11 @@ export default {
         explorationRate: 0.001,
         explorationRateDecay: 0.35,
         batch: 2000,
-        learningRate: 0.1
+        learningRate: 0.1,
+        rewards: {
+            alive: 10,
+            dead: -300
+        }
     }
 
 };

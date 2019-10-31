@@ -16,7 +16,6 @@ class Game {
         this.bird = new Bird().render(this.ctx);
         this.blocks = [new Block().render(this.ctx)];
         this.currentState = this.bird.jump.length - 1;
-        this.ticks = 0;
         this.score = 0;
         return this;
 
@@ -36,7 +35,8 @@ class Game {
 
 
     moveBlocks() {
-        if (this.blocks[0].lowerBlock.x <= config.world.nextBlockX + getRandomInt(config.world.widthRandomness  ) && this.blocks.length < 2) this.blocks.push(new Block());
+        if (this.blocks[0].lowerBlock.x <= config.world.nextBlockX + getRandomInt(config.world.widthRandomness)
+            && this.blocks.length < 2) this.blocks.push(new Block());
         this.blocks =
             this.blocks
                 .filter((el) => {
@@ -46,6 +46,7 @@ class Game {
                 })
                 .map((el) => el.shiftBlocks());
     }
+
 
     moveBird() {
         this.bird.y += this.bird.jump[this.currentState];
@@ -58,13 +59,11 @@ class Game {
     getFrame() {
         this.moveBird();
         this.moveBlocks();
-        this.ticks++;
         const gameStatus = this.gameIsOver();
         return {
             bird: this.bird,
             blocks: this.blocks,
             gameIsOver: gameStatus,
-            ticks: this.ticks,
             score: this.score,
             birdJump: this.birdJump
         }

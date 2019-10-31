@@ -8,11 +8,9 @@ class Agent {
         this.saveStates = saveStates;
         this.state = 0;
         this.losses = [];
+
         this.explorationRate = config.agent.explorationRate;
-        this.rewards = {
-            alive: 10,
-            dead: -300
-        };
+        this.rewards = config.agent.rewards;
         this.batch = config.agent.batch;
 
     }
@@ -118,7 +116,7 @@ class Agent {
         }
 
 
-        this.updatePrevState(gameIsOver, reward, state, ticks);
+        this.updatePrevState(gameIsOver, reward, state);
 
         return action;
     }
@@ -135,8 +133,7 @@ class Agent {
         return Math.random() <= this.explorationRate;
     }
 
-    updatePrevState(gameIsOver, reward, state, ticks) {
-        // TODO: rewrite ticks
+    updatePrevState(gameIsOver, reward, state) {
         if (this.state <= 1) return;
 
         let prevState = this.history.length - 2;

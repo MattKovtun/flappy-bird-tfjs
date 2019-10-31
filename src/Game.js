@@ -23,7 +23,7 @@ class Game {
     }
 
     gameIsOver() {
-        if (this.bird.y >= config.world.height) return true;
+        if (this.bird.y + this.bird.height >= config.world.height) return true;
         if (this.bird.y <= 0) return true;
         for (let i = 0; i < this.blocks.length; ++i)
             if (this.blocks[i].collision(this.bird)) return true;
@@ -36,11 +36,11 @@ class Game {
 
 
     moveBlocks() {
-        if (this.blocks[0].lowerBlock.x <= config.world.nextBlockX + getRandomInt(config.world.widthRandomness) && this.blocks.length < 2) this.blocks.push(new Block());
+        if (this.blocks[0].lowerBlock.x <= config.world.nextBlockX + getRandomInt(config.world.widthRandomness  ) && this.blocks.length < 2) this.blocks.push(new Block());
         this.blocks =
             this.blocks
                 .filter((el) => {
-                    const del = el.upperBlock.x >= 0 - config.block.width;
+                    const del = el.upperBlock.x >= -config.block.width;
                     if (!del) this.score++;
                     return del;
                 })

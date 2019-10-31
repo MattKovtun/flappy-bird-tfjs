@@ -3,7 +3,7 @@ export default {
     world: {
         height: 400,
         width: 400,
-        speed: 1,
+        speed: 10,
         blocksFrequency: 200,
         ms: 2,
         heightRandomness: 50,
@@ -12,8 +12,8 @@ export default {
 
     },
     bird: {
-        width: 15,
-        height: 15,
+        width: 40,
+        height: 40,
         color: "red",
         jumpSpeed: 7,
         fallingSpeed: 6,

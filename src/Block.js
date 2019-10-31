@@ -21,7 +21,9 @@ class Block {
 
     collision(object) {
         return areColliding(object, this.upperBlock) ||
-            areColliding(object, this.lowerBlock);
+            areColliding(object, this.lowerBlock) ||
+            areColliding(this.lowerBlock, object) ||
+            areColliding(this.upperBlock, object);
     }
 
     shiftBlocks() {

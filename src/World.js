@@ -29,12 +29,12 @@ class World {
         this.game.renderFrame();
 
         const {score, gameIsOver, ticks, birdJump} = worldState;
-
-        let action = 0;
-        if (!birdJump || gameIsOver) {
-            action = this.agent.act(worldState);
-            this.game.performAction(action);
-        }
+        //
+        // let action = 0;
+        // if (!birdJump || gameIsOver) {
+        //     action = this.agent.act(worldState);
+        //     this.game.performAction(action);
+        // }
 
 
         if (gameIsOver) {

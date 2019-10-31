@@ -9,7 +9,10 @@ class Agent {
         this.state = 0;
         this.losses = [];
         this.explorationRate = config.agent.explorationRate;
-        this.rewards = [10, -300];
+        this.rewards = {
+            alive: 10,
+            dead: -300
+        };
         this.batch = config.agent.batch;
 
     }
@@ -65,8 +68,8 @@ class Agent {
 
 
     calculateReward(gameIsOver) {
-        let reward = this.rewards[0];
-        if (gameIsOver) reward = this.rewards[1];
+        let reward = this.rewards.alive;
+        if (gameIsOver) reward = this.rewards.dead;
         return reward
 
     }
@@ -135,8 +138,6 @@ class Agent {
     updatePrevState(gameIsOver, reward, state, ticks) {
         // TODO: rewrite ticks
         if (this.state <= 1) return;
-
-        if (ticks === 1) return;
 
         let prevState = this.history.length - 2;
         if (gameIsOver) prevState = this.history.length - 1;

@@ -96,7 +96,7 @@ class Agent {
 
     act(worldState) {
         this.state++;
-        const {bird, blocks, ticks, gameIsOver} = worldState;
+        const {bird, blocks, gameIsOver} = worldState;
 
         const reward = this.calculateReward(gameIsOver);
         const input = this.formModelInputs(bird, blocks);
@@ -104,7 +104,7 @@ class Agent {
 
         const {action, predictedReward} = this.getActionReward(input);
 
-        if (!gameIsOver) {
+        if (!gameIsOver)
             this.history.push({
                 state: state,
                 predictedReward: predictedReward,
@@ -113,11 +113,9 @@ class Agent {
                 gameIsOver: -1,
                 nextState: -1
             });
-        }
 
 
         this.updatePrevState(gameIsOver, reward, state);
-
         return action;
     }
 

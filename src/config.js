@@ -3,21 +3,21 @@ export default {
     world: {
         height: 400,
         width: 400,
-        speed: 10,
+        refreshRate: 10,
         blocksFrequency: 200,
-        ms: 2,
+        shift: 2,
         heightRandomness: 50,
         widthRandomness: 30,
         nextBlockX: 125,
 
     },
     bird: {
-        width: 40,
-        height: 40,
+        width: 20,
+        height: 20,
         color: "red",
-        jumpSpeed: 7,
-        fallingSpeed: 6,
-        jumpLength: 25,
+        jumpSpeed: 11,
+        fallingSpeed: 3,
+        jumpLength: 10,
     },
     block: {
         width: 85,
@@ -33,6 +33,7 @@ export default {
         explorationRateDecay: 0.35,
         batch: 2000,
         learningRate: 0.1,
+        numberOfEpisodesBeforeRetrain: 100,
         rewards: {
             alive: 10,
             dead: -300

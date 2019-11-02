@@ -35,8 +35,7 @@ class Game {
 
 
     moveBlocks() {
-        if (this.blocks[0].lowerBlock.x <= config.world.nextBlockX + getRandomInt(config.world.widthRandomness)
-            && this.blocks.length < 2) this.blocks.push(new Block());
+        this.spawnBlock();
         this.blocks =
             this.blocks
                 .filter((el) => {
@@ -44,13 +43,18 @@ class Game {
                     if (!del) this.score++;
                     return del;
                 })
-                .map((el) => el.shiftBlocks());
+                .map((el) => el.shiftBlocks(config.world.shift));
     }
 
 
+    spawnBlock() {
+        if (this.blocks[0].lowerBlock.x <= config.world.nextBlockX + getRandomInt(config.world.widthRandomness)
+            && this.blocks.length < 2) this.blocks.push(new Block());
+    }
+
     moveBird() {
         this.bird.y += this.bird.jump[this.currentState];
-        this.bird.y += config.bird.fallingSpeed;
+        this.bird.y += this.bird.fallingSpeed;
         this.currentState = Math.min(this.bird.jump.length - 1, this.currentState + 1);
         this.birdJump = (this.currentState !== this.bird.jump.length - 1);
 

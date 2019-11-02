@@ -19,6 +19,7 @@ export const renderLosses = (losses, entryPoint) => {
 };
 
 export const renderInformation = (episodes, explorationRate, entryPoint) => {
+    // console.log(episodes);
     const numOfEpisodes = episodes.length;
     const currentState = episodes.reduce((a, b) => a + b, 0);
     const avgEpisodeLength = currentState / numOfEpisodes;

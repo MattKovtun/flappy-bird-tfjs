@@ -26,9 +26,9 @@ class Block {
             areColliding(this.upperBlock, object);
     }
 
-    shiftBlocks() {
-        this.lowerBlock.x -= config.world.ms;
-        this.upperBlock.x -= config.world.ms;
+    shiftBlocks(step) {
+        this.lowerBlock.x -= step;
+        this.upperBlock.x -= step;
         return this;
     }
 

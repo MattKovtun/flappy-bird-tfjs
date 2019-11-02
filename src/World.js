@@ -1,7 +1,7 @@
 import Game from "./Game";
 import Agent from "./Agent";
 import config from "./config";
-import {renderInformation, renderLosses, renderScore} from "./utils";
+import {renderWorldVerbose} from "./utils";
 
 class World {
     constructor() {
@@ -11,10 +11,6 @@ class World {
         this.game = new Game(this.canvas, this.ctx).startNewGame();
         this.agent = new Agent(config.agent.saveStates);
 
-        this.movementIndicator = document.getElementById("action");
-        this.lossInfo = document.getElementById("losses");
-        this.information = document.getElementById("information");
-        this.scoreInfo = document.getElementById("score");
 
         this.episodes = [];
         this.playGame = true;
@@ -39,8 +35,9 @@ class World {
 
 
         if (gameIsOver) {
+            this.episodes.push(this.game.tick);
             this.game.startNewGame();
-
+            this.scores.push(score);
         }
 
         // TODO: move to config
@@ -48,26 +45,12 @@ class World {
             await this.agent.retrainModel();
 
 
-        this.renderWorldVerbose(score, action, gameIsOver);
         await new Promise((resolve, reject) => setTimeout(resolve, this.refreshRate));
+        renderWorldVerbose(score, action, gameIsOver, this.agent.explorationRate, this.agent.losses, this.episodes);
+
 
     };
 
-    renderWorldVerbose(score, action, gameIsOver) {
-        if (action)
-            this.movementIndicator.classList = ["arrow arrow_up"];
-        else
-            this.movementIndicator.classList = ["arrow arrow_down"];
-
-
-        if (gameIsOver) {
-            renderLosses(this.agent.losses, this.lossInfo);
-            renderInformation(this.episodes, this.agent.explorationRate, this.information);
-            this.scores.push(score);
-        }
-
-        renderScore(score, this.scoreInfo);
-    };
 
 }
 

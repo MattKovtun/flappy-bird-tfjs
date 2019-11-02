@@ -8,7 +8,6 @@ class Game {
     constructor(canvas, ctx) {
         this.ctx = ctx;
         this.canvas = canvas;
-        this.score = 0;
         this.birdJump = false;
     }
 
@@ -17,6 +16,7 @@ class Game {
         this.blocks = [new Block().render(this.ctx)];
         this.currentState = this.bird.jump.length - 1;
         this.score = 0;
+        this.tick = 0;
         return this;
 
     }
@@ -64,6 +64,7 @@ class Game {
         this.moveBird();
         this.moveBlocks();
         const gameStatus = this.gameIsOver();
+        this.tick++;
         return {
             bird: this.bird,
             blocks: this.blocks,

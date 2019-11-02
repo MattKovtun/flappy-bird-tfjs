@@ -1,9 +1,15 @@
+const movementIndicator = document.getElementById("action");
+const lossInfo = document.getElementById("losses");
+const information = document.getElementById("information");
+const scoreInfo = document.getElementById("score");
+
+
 export const getRandomInt = (max) => Math.floor(Math.random() * Math.floor(max));
 
 export const calcDistance = (a, b) => Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
 
 export const areColliding = (objectOne, objectTwo) => (objectOne.y >= objectTwo.y && objectOne.y <= (objectTwo.y + objectTwo.height))
-                                                      && (objectOne.x >= objectTwo.x && objectOne.x <= objectTwo.x + objectTwo.width);
+    && (objectOne.x >= objectTwo.x && objectOne.x <= objectTwo.x + objectTwo.width);
 
 
 export const renderLosses = (losses, entryPoint) => {
@@ -33,3 +39,21 @@ export const renderInformation = (episodes, explorationRate, entryPoint) => {
 
 
 export const renderScore = (score, entryPoint) => entryPoint.innerHTML = `Score: ${score}`;
+
+
+export const renderWorldVerbose = (score, action, gameIsOver, explorationRate, losses, episodes) => {
+    if (action)
+        movementIndicator.classList = ["arrow arrow_up"];
+    else
+        movementIndicator.classList = ["arrow arrow_down"];
+
+
+    if (gameIsOver) {
+        renderLosses(losses, lossInfo);
+        renderInformation(episodes,explorationRate, information);
+
+    }
+
+
+    renderScore(score, scoreInfo);
+};

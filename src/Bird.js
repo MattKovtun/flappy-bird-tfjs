@@ -26,7 +26,8 @@ class Bird {
     render(ctx) {
         ctx.beginPath();
         ctx.fillStyle = this.color;
-        ctx.arc(this.x, this.y, this.height / 2, 0, 2 * Math.PI);
+        // ctx.arc(this.x, this.y, this.height / 2, 0, 2 * Math.PI);
+        ctx.fillRect(this.x,this.y,this.height,this.width);
         ctx.fill();
 
         // ctx.drawImage(this.drawing, this.x, this.y, this.height, this.width);

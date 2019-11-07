@@ -40,8 +40,8 @@ class World {
             this.scores.push(score);
         }
 
-        // TODO: move to config
-        if (this.agent.state > this.agent.numberOfEpisodesBeforeRetrain && gameIsOver)
+
+            if (this.agent.state > this.agent.numberOfEpisodesBeforeRetrain && gameIsOver)
             await this.agent.retrainModel();
 
 

@@ -3,7 +3,7 @@ export default {
     world: {
         height: 400,
         width: 400,
-        refreshRate: 10,
+        refreshRate: 25,
         blocksFrequency: 200,
         shift: 2,
         heightRandomness: 50,
@@ -21,7 +21,7 @@ export default {
     },
     block: {
         width: 85,
-        height: 170,
+        height: 140,
         color: "green",
         blockInitialX: 320,
         blockInitialY: 0
@@ -29,7 +29,7 @@ export default {
 
     agent: {
         saveStates: 2500,
-        explorationRate: 0.001,
+        explorationRate: 0.01,
         explorationRateDecay: 0.35,
         batch: 2000,
         learningRate: 0.1,

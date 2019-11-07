@@ -1,4 +1,4 @@
-import {calcDistance, getRandomInt} from "./utils";
+import {getRandomInt} from "./utils";
 import config from "./config";
 
 class Agent {
@@ -12,6 +12,7 @@ class Agent {
         this.explorationRate = config.agent.explorationRate;
         this.rewards = config.agent.rewards;
         this.batch = config.agent.batch;
+        this.numberOfEpisodesBeforeRetrain = config.agent.numberOfEpisodesBeforeRetrain;
 
     }
 
@@ -68,7 +69,7 @@ class Agent {
     calculateReward(gameIsOver) {
         let reward = this.rewards.alive;
         if (gameIsOver) reward = this.rewards.dead;
-        return reward
+        return reward;
 
     }
 
@@ -83,13 +84,13 @@ class Agent {
 
 
         const distanceToBlockVert = bird.y - frontBlock.lowerBlock.y;
+        const distanceToBlockHoriz = frontBlock.lowerBlock.x + frontBlock.lowerBlock.width - bird.x;
 
-
-        const distanceToBlockHoriz = calcDistance(bird, {
-            x: frontBlock.lowerBlock.x + frontBlock.lowerBlock.width,
-            y: bird.y
-        });  // distances are ints
-
+        //
+        // const distanceToBlockHoriz = calcDistance(bird, {
+        //     x: frontBlock.lowerBlock.x + frontBlock.lowerBlock.width,
+        //     y: bird.y
+        // });  // distances are ints
 
         return [distanceToBlockVert, distanceToBlockHoriz];
     }

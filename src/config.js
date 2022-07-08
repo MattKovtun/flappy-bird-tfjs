@@ -20,7 +20,7 @@ export default {
         jumpLength: 10,
     },
     block: {
-        width: 85,
+        width: 78,
         height: 140,
         color: "green",
         blockInitialX: 320,

@@ -29,9 +29,7 @@ class Bird {
         // ctx.fillRect(this.x,this.y,this.height,this.width);
         // ctx.fill();
 
-        const size = [this.height, this.width];
-        ctx.drawImage(this.img, 432, 36, 51, 36,  this.x, this.y, ...size);
-
+        ctx.drawImage(this.img, 432, 36, 51, 36,  this.x, this.y, this.height, this.width);
         return this;
     }
 }

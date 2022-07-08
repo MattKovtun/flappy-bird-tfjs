@@ -25,6 +25,7 @@ class Agent {
         this.model.add(tf.layers.dense({units: 4}));
         this.model.add(tf.layers.dense({units: 2}));
         this.model.compile({loss: 'meanSquaredError', optimizer: tf.train.adam(config.agent.learningRate)});
+        // console.log(this.model);
 
     }
 
@@ -60,7 +61,7 @@ class Agent {
 
 
         const h = await this.model.fit(xs, ys, {epochs: 1});
-        // console.log("Loss after Epoch " + " : " + h.history.loss[0]);
+        console.log("Loss after Epoch " + " : " + h.history.loss[0]);
         this.losses.push(h.history.loss[0]);
 
     }

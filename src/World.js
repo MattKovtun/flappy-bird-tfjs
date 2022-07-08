@@ -39,10 +39,11 @@ class World {
             this.game.startNewGame();
             this.scores.push(score);
         }
-
-
-            if (this.agent.state > this.agent.numberOfEpisodesBeforeRetrain && gameIsOver)
-            await this.agent.retrainModel();
+        
+        if (this.agent.state > this.agent.numberOfEpisodesBeforeRetrain && gameIsOver){
+            console.log('Retraining');
+            await this.agent.retrainModel();        
+        }
 
 
         await new Promise((resolve, reject) => setTimeout(resolve, this.refreshRate));

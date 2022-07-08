@@ -5,7 +5,7 @@ export default {
         width: 400,
         refreshRate: 25,
         blocksFrequency: 200,
-        shift: 2,
+        shift: 5,
         heightRandomness: 50,
         widthRandomness: 30,
         nextBlockX: 125,
@@ -28,12 +28,12 @@ export default {
     },
 
     agent: {
-        saveStates: 2500,
+        saveStates: 100,
         explorationRate: 0.01,
         explorationRateDecay: 0.35,
         batch: 2000,
         learningRate: 0.1,
-        numberOfEpisodesBeforeRetrain: 100,
+        numberOfEpisodesBeforeRetrain: 10,
         rewards: {
             alive: 10,
             dead: -300

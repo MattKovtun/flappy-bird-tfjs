@@ -5,7 +5,7 @@ import {areColliding, getRandomInt} from './utils';
 class Block {
     constructor() {
         this.img = new Image();
-        this.img.src = "https://i.ibb.co/Q9yv5Jk/flappy-bird-set.png";
+        this.img.src = config.img;
 
         const heightRandomness = getRandomInt(config.world.heightRandomness) - config.world.heightRandomness * 0.5;
         this.upperBlock = {
@@ -39,10 +39,6 @@ class Block {
 
         ctx.drawImage(this.img,  432 + this.lowerBlock.width, 108, this.lowerBlock.width, this.lowerBlock.height, this.lowerBlock.x, this.lowerBlock.y, this.lowerBlock.width, this.lowerBlock.height);
         ctx.drawImage(this.img,  432, 588 - this.upperBlock.height, this.upperBlock.width, this.upperBlock.height, this.upperBlock.x, this.upperBlock.y, this.upperBlock.width, this.upperBlock.height);
-
-        // ctx.fillStyle = config.block.color;
-        // ctx.fillRect(this.upperBlock.x, this.upperBlock.y, this.upperBlock.width, this.upperBlock.height);
-        // ctx.fillRect(this.lowerBlock.x, this.lowerBlock.y, this.lowerBlock.width, this.lowerBlock.height);
         return this;
     }
 }

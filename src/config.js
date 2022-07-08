@@ -3,7 +3,7 @@ export default {
     world: {
         height: 400,
         width: 400,
-        refreshRate: 40,
+        refreshRate: 13,
         blocksFrequency: 200,
         shift: 3,
         heightRandomness: 50,
@@ -16,7 +16,9 @@ export default {
         height: 20,
         jumpSpeed: 11,
         fallingSpeed: 3,
-        jumpLength: 10,
+        jumpLength: 8,
+        startX: 35,
+        startY: 200,
     },
     block: {
         width: 78,
@@ -36,6 +38,7 @@ export default {
             alive: 10,
             dead: -300
         }
-    }
+    },
+    img: 'https://i.ibb.co/Q9yv5Jk/flappy-bird-set.png'
 
 };

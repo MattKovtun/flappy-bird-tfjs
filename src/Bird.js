@@ -17,20 +17,20 @@ class Bird {
 
 
 
-        this.drawing = new Image();
-        this.drawing.src = "92c6p4k4ky311.png"; // can also be a remote URL e.g. http://
+        this.img = new Image();
+        this.img.src = "https://i.ibb.co/Q9yv5Jk/flappy-bird-set.png";
 
 
     }
 
     render(ctx) {
-        ctx.beginPath();
-        ctx.fillStyle = this.color;
-        // ctx.arc(this.x, this.y, this.height / 2, 0, 2 * Math.PI);
-        ctx.fillRect(this.x,this.y,this.height,this.width);
-        ctx.fill();
+        // ctx.beginPath();
+        // ctx.fillStyle = this.color;
+        // ctx.fillRect(this.x,this.y,this.height,this.width);
+        // ctx.fill();
 
-        // ctx.drawImage(this.drawing, this.x, this.y, this.height, this.width);
+        const size = [this.height, this.width];
+        ctx.drawImage(this.img, 432, 36, 51, 36,  this.x, this.y, ...size);
 
         return this;
     }

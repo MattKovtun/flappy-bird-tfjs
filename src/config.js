@@ -3,9 +3,9 @@ export default {
     world: {
         height: 400,
         width: 400,
-        refreshRate: 25,
+        refreshRate: 40,
         blocksFrequency: 200,
-        shift: 5,
+        shift: 3,
         heightRandomness: 50,
         widthRandomness: 30,
         nextBlockX: 125,
@@ -14,7 +14,6 @@ export default {
     bird: {
         width: 20,
         height: 20,
-        color: "red",
         jumpSpeed: 11,
         fallingSpeed: 3,
         jumpLength: 10,
@@ -22,7 +21,6 @@ export default {
     block: {
         width: 78,
         height: 140,
-        color: "green",
         blockInitialX: 320,
         blockInitialY: 0
     },

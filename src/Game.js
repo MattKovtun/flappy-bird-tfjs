@@ -55,8 +55,9 @@ class Game {
     moveBird() {
         this.bird.y += this.bird.jump[this.currentState];
         this.bird.y += this.bird.fallingSpeed;
-        this.currentState = Math.min(this.bird.jump.length - 1, this.currentState + 1);
+        
         this.birdJump = (this.currentState !== this.bird.jump.length - 1);
+        this.currentState = Math.min(this.bird.jump.length - 1, this.currentState + 1);
 
     }
 

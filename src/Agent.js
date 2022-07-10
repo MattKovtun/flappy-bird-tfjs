@@ -3,10 +3,12 @@ import config from "./config";
 
 class Agent {
     constructor(saveStates) {
-        this.initModel();
+        this.inputShapeLength = 3;
         this.history = [];
         this.stateIndex = 0;
         this.losses = [];
+
+        this.initModel();
 
         this.explorationRate = config.agent.explorationRate;
         this.saveStates = config.agent.saveStates;
@@ -14,14 +16,15 @@ class Agent {
         this.batch = config.agent.batch;
         this.numberOfEpisodesBeforeRetrain = config.agent.numberOfEpisodesBeforeRetrain;
 
+
+
     }
 
     initModel() {
         //TODO: test different losses, architectures
         // const lossFn = (pred, label) => pred.sub(label).square().mean();
-
         this.model = tf.sequential();
-        this.model.add(tf.layers.dense({units: 4, inputShape: [2]}));
+        this.model.add(tf.layers.dense({units: 4, inputShape: [this.inputShapeLength]}));
         // this.model.add(tf.layers.dense({units: 4}));
         this.model.add(tf.layers.dense({units: 2}));
         this.model.compile({loss: 'meanSquaredError', optimizer: tf.train.adam(config.agent.learningRate)});
@@ -30,7 +33,7 @@ class Agent {
     }
 
     modelPredict(input) {
-        const prediction = this.model.predict((tf.tensor2d(input, [1, 2])));
+        const prediction = this.model.predict((tf.tensor2d(input, [1, this.inputShapeLength])));
         const action = prediction.argMax(1).dataSync()[0];
         const predictedReward = prediction.max(1).dataSync()[0];
         return {action: action, predictedReward: predictedReward};
@@ -54,7 +57,7 @@ class Agent {
             ys.push(y);
         }
 
-        xs = tf.tensor2d(xs, [xs.length, 2]);
+        xs = tf.tensor2d(xs, [xs.length, this.inputShapeLength]);
         ys = tf.tensor2d(ys, [ys.length, 2]);
 
 
@@ -65,9 +68,15 @@ class Agent {
     }
 
 
-    calculateReward(gameIsOver) {
-        let reward = this.rewards.alive;
-        if (gameIsOver) reward = this.rewards.dead;
+    calculateReward(worldState) {
+        // const {gameIsOver} = worldState;
+        // let reward = this.rewards.alive;
+        // if (gameIsOver) reward = this.rewards.dead;
+
+        const inputs = this.formModelInputs(worldState.bird, worldState.blocks);
+
+        let reward = inputs[0] < inputs[2] && inputs[1] > inputs[2] ? 100 : -100;
+
         return reward;
 
     }
@@ -81,24 +90,17 @@ class Agent {
             }
         }
 
+        const upperTunnel = frontBlock.upperBlock.y + frontBlock.upperBlock.height;
+        const lowerTunnel = frontBlock.lowerBlock.y;
 
-        const distanceToBlockVert = bird.y - frontBlock.lowerBlock.y;
-        const distanceToBlockHoriz = frontBlock.lowerBlock.x + frontBlock.lowerBlock.width - bird.x;
-
-        //
-        // const distanceToBlockHoriz = calcDistance(bird, {
-        //     x: frontBlock.lowerBlock.x + frontBlock.lowerBlock.width,
-        //     y: bird.y
-        // });  // distances are ints
-
-        return [distanceToBlockVert, distanceToBlockHoriz];
+        return [upperTunnel, lowerTunnel, bird.y];
     }
 
     act(worldState) {
         this.stateIndex++;
         const {bird, blocks, gameIsOver} = worldState;
 
-        const reward = this.calculateReward(gameIsOver);
+        const reward = this.calculateReward(worldState);
 
         const input = this.formModelInputs(bird, blocks);
         const {action, predictedReward} = this.getActionReward(input);

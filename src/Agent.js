@@ -5,11 +5,11 @@ class Agent {
     constructor(saveStates) {
         this.initModel();
         this.history = [];
-        this.saveStates = saveStates;
-        this.state = 0;
+        this.stateIndex = 0;
         this.losses = [];
 
         this.explorationRate = config.agent.explorationRate;
+        this.saveStates = config.agent.saveStates;
         this.rewards = config.agent.rewards;
         this.batch = config.agent.batch;
         this.numberOfEpisodesBeforeRetrain = config.agent.numberOfEpisodesBeforeRetrain;
@@ -22,7 +22,7 @@ class Agent {
 
         this.model = tf.sequential();
         this.model.add(tf.layers.dense({units: 4, inputShape: [2]}));
-        this.model.add(tf.layers.dense({units: 4}));
+        // this.model.add(tf.layers.dense({units: 4}));
         this.model.add(tf.layers.dense({units: 2}));
         this.model.compile({loss: 'meanSquaredError', optimizer: tf.train.adam(config.agent.learningRate)});
         // console.log(this.model);
@@ -48,8 +48,6 @@ class Agent {
             xs.push(element.state);
 
             let y = [0, 0];
-
-
             y[element.action] = element.reward;
 
 
@@ -97,27 +95,28 @@ class Agent {
     }
 
     act(worldState) {
-        this.state++;
+        this.stateIndex++;
         const {bird, blocks, gameIsOver} = worldState;
 
         const reward = this.calculateReward(gameIsOver);
-        const input = this.formModelInputs(bird, blocks);
-        const state = input;
 
+        const input = this.formModelInputs(bird, blocks);
         const {action, predictedReward} = this.getActionReward(input);
 
-        if (!gameIsOver)
+        this.updatePrevState(gameIsOver, reward, input);
+
+        if (!gameIsOver) 
             this.history.push({
-                state: state,
+                state: input,
                 predictedReward: predictedReward,
                 action: action,
                 reward: -1,
                 gameIsOver: -1,
                 nextState: -1
             });
-
-
-        this.updatePrevState(gameIsOver, reward, state);
+        // if (this.history.length == 10) {
+        //     console.log(this.history);
+        // }
         return action;
     }
 
@@ -134,16 +133,13 @@ class Agent {
     }
 
     updatePrevState(gameIsOver, reward, state) {
-        if (this.state <= 1) return;
+        if (!this.history.length) return;
 
-        let prevState = this.history.length - 2;
-        if (gameIsOver) prevState = this.history.length - 1;
-
+        let prevState = this.history.length - 1;
 
         this.history[prevState].reward = reward;
         this.history[prevState].nextState = state;
         this.history[prevState].gameIsOver = gameIsOver;
-
     }
 
 }

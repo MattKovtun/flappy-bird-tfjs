@@ -28,10 +28,10 @@ class World {
         const {score, gameIsOver, birdJump} = worldState;
 
         let action = 0;
-        // if (!birdJump || gameIsOver) {
-        //     action = this.agent.act(worldState);
-        //     this.game.performAction(action);
-        // }
+        if (!birdJump) {
+            action = this.agent.act(worldState);
+            this.game.performAction(action);
+        }
 
 
         if (gameIsOver) {
@@ -40,7 +40,8 @@ class World {
             this.scores.push(score);
         }
         
-        if (this.agent.state > this.agent.numberOfEpisodesBeforeRetrain && gameIsOver){
+        // move to agent
+        if (this.agent.history.length > this.agent.numberOfEpisodesBeforeRetrain && gameIsOver){
             console.log('Retraining');
             await this.agent.retrainModel();        
         }
@@ -48,8 +49,6 @@ class World {
 
         await new Promise((resolve, reject) => setTimeout(resolve, this.refreshRate));
         renderWorldVerbose(score, action, gameIsOver, this.agent.explorationRate, this.agent.losses, this.episodes);
-
-
     };
 
 

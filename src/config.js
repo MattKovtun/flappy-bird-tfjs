@@ -28,12 +28,13 @@ export default {
     },
 
     agent: {
-        saveStates: 100,
-        explorationRate: 0.01,
+        saveStates: 5000,
+        explorationRate: 0.005,
         explorationRateDecay: 0.35,
         batch: 2000,
-        learningRate: 0.1,
-        numberOfEpisodesBeforeRetrain: 10,
+        learningRate: 0.01,
+        epochs: 3,
+        numberOfEpisodesBeforeRetrain: 3,
         rewards: {
             alive: 10,
             dead: -300

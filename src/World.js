@@ -38,13 +38,11 @@ class World {
             this.episodes.push(this.game.tick);
             this.game.startNewGame();
             this.scores.push(score);
+
+            await this.agent.retrainModel(this.episodes.length);
         }
         
-        // move to agent
-        if (this.agent.history.length > this.agent.numberOfEpisodesBeforeRetrain && gameIsOver){
-            console.log('Retraining');
-            await this.agent.retrainModel();        
-        }
+
 
 
         await new Promise((resolve, reject) => setTimeout(resolve, this.refreshRate));

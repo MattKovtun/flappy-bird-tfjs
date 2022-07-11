@@ -8,16 +8,14 @@ class Agent {
         this.stateIndex = 0;
         this.losses = [];
 
-        this.initModel();
-
         this.explorationRate = config.agent.explorationRate;
         this.saveStates = config.agent.saveStates;
         this.rewards = config.agent.rewards;
         this.batch = config.agent.batch;
+        this.epochs = config.agent.epochs;
         this.numberOfEpisodesBeforeRetrain = config.agent.numberOfEpisodesBeforeRetrain;
 
-
-
+        this.initModel();
     }
 
     initModel() {
@@ -39,10 +37,11 @@ class Agent {
         return {action: action, predictedReward: predictedReward};
     }
 
-    async retrainModel() {
-        if (this.history.length >= 2 * this.saveStates)
-            this.history = this.history.slice(this.history.length - this.saveStates);
+    async retrainModel(numOfEpisodes) {
+        if (this.history.length >= this.saveStates)
+            this.history = this.history.slice(Math.floor(this.history.length / 2));
 
+        if (numOfEpisodes % this.numberOfEpisodesBeforeRetrain != 0) return;
 
         let xs = [];
         let ys = [];
@@ -61,8 +60,8 @@ class Agent {
         ys = tf.tensor2d(ys, [ys.length, 2]);
 
 
-        const h = await this.model.fit(xs, ys, {epochs: 1});
-        console.log("Loss after Epoch " + " : " + h.history.loss[0]);
+        const h = await this.model.fit(xs, ys, {epochs: this.epochs});
+        // console.log("Loss after Epoch " + " : " + h.history.loss[0]);
         this.losses.push(h.history.loss[0]);
 
     }
@@ -103,7 +102,7 @@ class Agent {
         const reward = this.calculateReward(worldState);
 
         const input = this.formModelInputs(bird, blocks);
-        const {action, predictedReward} = this.getActionReward(input);
+        const {action, predictedReward} = this.getActionReward(input, worldState.score);
 
         this.updatePrevState(gameIsOver, reward, input);
 
@@ -122,17 +121,13 @@ class Agent {
         return action;
     }
 
-    getActionReward(state) {
-        if (this.randomMove())
+    getActionReward(state, score) {
+        if (score <= 10 && Math.random() <= this.explorationRate)
             return {action: getRandomInt(2), predictedReward: -1};
 
         return this.modelPredict(state);
     }
 
-
-    randomMove() {
-        return Math.random() <= this.explorationRate;
-    }
 
     updatePrevState(gameIsOver, reward, state) {
         if (!this.history.length) return;

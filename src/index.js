@@ -29,7 +29,17 @@ document.addEventListener('keyup', (ev) => {
 });
 
 document
-    .getElementById('buttonskip3')
-    .addEventListener('click', () => {
-    skip = 10;
+    .getElementById('buttons')
+    .addEventListener('click', (ev) => {
+    switch (ev.target.id) {
+        case 'buttonskip-1':
+            skip = 5;
+            break;
+        case 'buttonskip-2':
+            skip = 10;
+            break;
+        case 'buttonskip-3':
+            skip = 20;
+            break;
+    }
 })

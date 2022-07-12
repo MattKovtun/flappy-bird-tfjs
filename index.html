@@ -7,6 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/3.18.0/tf.min.js" integrity="sha512-BI4yRLpuHJq/QOl2YugPqEuInx3dPoXOBE0uSaOOysCXlRK4JuD2E4Ije8bOE9UEpXY1Sqyk6Dvz/W8a6tJ2aQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <style>
+
     body {
         background-color: grey;
     }
@@ -65,14 +66,77 @@
     }
 
     #score {
-        position: absolute;
-        right: 50%;
+        margin: auto;
+        text-align: center;
+    }
+
+    #buttons {
+        text-align: center;
     }
 
     span {
         display: block;
         padding-left: 2px;
     }
+
+
+    
+    .buttonskip {
+        appearance: none;
+        border: 1px solid rgba(27, 31, 35, .15);
+        border-radius: 6px;
+        box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+        box-sizing: border-box;
+        color: #fff;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 20px;
+        padding: 6px 16px;
+        position: relative;
+        text-align: center;
+        touch-action: manipulation;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+.buttonskip:focus:not(:focus-visible):not(.focus-visible) {
+  box-shadow: none;
+  outline: none;
+}
+
+.buttonskip:hover {
+  background-color: #2c974b;
+}
+
+.buttonskip:focus {
+  box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+  outline: none;
+}
+
+.buttonskip:disabled {
+  background-color: #94d3a2;
+  border-color: rgba(27, 31, 35, .1);
+  color: rgba(255, 255, 255, .8);
+  cursor: default;
+}
+
+.buttonskip:active {
+  background-color: #298e46;
+  box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
+}
+
+#buttonskip-1 {
+    background-color: #6fbf73;;
+}
+#buttonskip-2 {
+    background-color: #4caf50;
+}
+#buttonskip-3 {
+    background-color: #357a38;
+}
+
 
 
 </style>
@@ -84,7 +148,9 @@
     <canvas id="entry-point" width="400" height="400"></canvas>
     <div id="score"></div>
     <div id="buttons">
-        <button id="buttonskip3">skip 3 episodes</button>
+        <button id="buttonskip-1" class="buttonskip">skip 5 episodes</button>
+        <button id="buttonskip-2" class="buttonskip">skip 10 episodes</button>
+        <button id="buttonskip-3" class="buttonskip">skip 20 episodes</button>
     </div>
 </main>
 <script src="dist/main.js"></script>

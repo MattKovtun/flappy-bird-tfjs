@@ -4,14 +4,14 @@ import World from './World';
 const world = new World();
 
 let skip = 0;
-let skipEpisode = false;
+let renderEpisode = true;
 
 
 const main = async (world) => {
     while (world.playGame) {
-        skipEpisode = skip > 0 ? true: false;
+        renderEpisode = skip > 0 ? false: true;
 
-        await world.graphicMode(skipEpisode);
+        await world.graphicMode(renderEpisode);
         skip--;
            
     }

@@ -1,14 +1,14 @@
 import Game from "./Game";
 import Agent from "./Agent";
 import config from "./config";
-import {renderWorldVerbose} from "./utils";
+import {renderWorldVerbose, renderScore} from "./utils";
 
 class World {
     constructor() {
         this.canvas = document.getElementById("entry-point");
         this.ctx = this.canvas.getContext('2d');
 
-        this.game = new Game(this.canvas, this.ctx).startNewGame();
+        this.game = new Game(this.canvas, this.ctx);
         this.agent = new Agent(config.agent.saveStates);
 
 
@@ -20,32 +20,38 @@ class World {
 
     }
 
+    async playOneEpisode(renderEpisode) {
+        this.game.startNewGame();
 
-    async graphicMode(skipEpisode) {
-        const worldState = this.game.getFrame();
-        const {score, gameIsOver, birdJump} = worldState;
-
-        if (!skipEpisode) {
+        while (true) {
+            const worldState = this.game.getFrame();
             this.game.renderFrame();
-            await new Promise((resolve, reject) => setTimeout(resolve, this.refreshRate));
+
+            const {score, gameIsOver, birdJump} = worldState;
+            renderScore(score);
+
+            let action;
+            if (!birdJump) {
+                action = this.agent.act(worldState);
+                this.game.performAction(action);
+            }
+
+            
+            if (gameIsOver) {
+                this.episodes.push(this.game.tick);
+                this.scores.push(score);
+                break;
+            }
+            if (renderEpisode) await new Promise((resolve, reject) => setTimeout(resolve, this.refreshRate));
+
         }
+    }
 
-        let action;
-        if (!birdJump) {
-            action = this.agent.act(worldState);
-            this.game.performAction(action);
-        }
+    async graphicMode(renderEpisode) {
+        await this.playOneEpisode(renderEpisode);
 
-
-        if (gameIsOver) {
-            this.episodes.push(this.game.tick);
-            this.game.startNewGame();
-            this.scores.push(score);
-            await this.agent.retrainModel(this.episodes.length);
-        }
-        
-
-        renderWorldVerbose(score, action, gameIsOver, this.agent.explorationRate, this.agent.losses, this.episodes);
+        await this.agent.retrainModel(this.episodes.length);
+        renderWorldVerbose(this.agent.explorationRate, this.agent.losses, this.episodes);
     };
 
 

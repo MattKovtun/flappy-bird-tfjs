@@ -9,6 +9,7 @@ class Game {
         this.ctx = ctx;
         this.canvas = canvas;
         this.birdJump = false;
+        this.startNewGame()
     }
 
     startNewGame() {

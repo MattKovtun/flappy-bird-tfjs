@@ -39,22 +39,17 @@ export const renderInformation = (episodes, explorationRate, entryPoint) => {
 };
 
 
-export const renderScore = (score, entryPoint) => entryPoint.innerHTML = `Score: ${score}`;
+export const renderScore = (score) => document.getElementById("score").innerHTML = `Score: ${score}`;
 
 
-export const renderWorldVerbose = (score, action, gameIsOver, explorationRate, losses, episodes) => {
+export const renderWorldVerbose = (explorationRate, losses, episodes) => {
     // if (action)
     //     movementIndicator.classList = ["arrow arrow_up"];
     // else
     //     movementIndicator.classList = ["arrow arrow_down"];
 
 
-    if (gameIsOver) {
-        renderLosses(losses, lossInfo);
-        renderInformation(episodes, explorationRate, information);
 
-    }
-
-
-    renderScore(score, scoreInfo);
+    renderLosses(losses, lossInfo);
+    renderInformation(episodes, explorationRate, information);
 };

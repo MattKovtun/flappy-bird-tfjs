@@ -43,10 +43,10 @@ export const renderScore = (score, entryPoint) => entryPoint.innerHTML = `Score:
 
 
 export const renderWorldVerbose = (score, action, gameIsOver, explorationRate, losses, episodes) => {
-    if (action)
-        movementIndicator.classList = ["arrow arrow_up"];
-    else
-        movementIndicator.classList = ["arrow arrow_down"];
+    // if (action)
+    //     movementIndicator.classList = ["arrow arrow_up"];
+    // else
+    //     movementIndicator.classList = ["arrow arrow_down"];
 
 
     if (gameIsOver) {

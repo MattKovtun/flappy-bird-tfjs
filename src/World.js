@@ -21,13 +21,16 @@ class World {
     }
 
 
-    async graphicMode() {
+    async graphicMode(skipEpisode) {
         const worldState = this.game.getFrame();
-        this.game.renderFrame();
-
         const {score, gameIsOver, birdJump} = worldState;
 
-        let action = 0;
+        if (!skipEpisode) {
+            this.game.renderFrame();
+            await new Promise((resolve, reject) => setTimeout(resolve, this.refreshRate));
+        }
+
+        let action;
         if (!birdJump) {
             action = this.agent.act(worldState);
             this.game.performAction(action);
@@ -38,14 +41,10 @@ class World {
             this.episodes.push(this.game.tick);
             this.game.startNewGame();
             this.scores.push(score);
-
             await this.agent.retrainModel(this.episodes.length);
         }
         
 
-
-
-        await new Promise((resolve, reject) => setTimeout(resolve, this.refreshRate));
         renderWorldVerbose(score, action, gameIsOver, this.agent.explorationRate, this.agent.losses, this.episodes);
     };
 

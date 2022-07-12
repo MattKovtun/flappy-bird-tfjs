@@ -7,7 +7,7 @@ class Block {
         this.img = new Image();
         this.img.src = config.img;
 
-        const heightRandomness = getRandomInt(config.world.heightRandomness) - config.world.heightRandomness * 0.5;
+        const heightRandomness = getRandomInt(config.world.heightRandomness) - config.world.heightRandomness * 0.5; // move to config
         this.upperBlock = {
             height: config.block.height - heightRandomness,
             width: config.block.width,

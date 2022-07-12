@@ -16,11 +16,9 @@ class Bird {
         this.jump = new Array(this.jumpLength).fill(-this.jumpSpeed);
         this.jump.push(0);
 
-
-
         this.img = new Image();
         this.img.src = config.img;
-        this.birdOnImg = [51, 36];
+        this.birdOnImg = [51, 36]; // sprite
 
     }
 

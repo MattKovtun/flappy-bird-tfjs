@@ -61,7 +61,7 @@ class Agent {
 
 
         const h = await this.model.fit(xs, ys, {epochs: this.epochs});
-        this.losses.push(h.history.loss[0]);
+        this.losses.push(Math.round(h.history.loss[0]));
 
     }
 

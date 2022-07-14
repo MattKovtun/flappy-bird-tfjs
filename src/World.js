@@ -2,7 +2,6 @@ import Game from "./Game";
 import Agent from "./Agent";
 import config from "./config";
 import Info from "./Info";
-import {renderWorldVerbose, renderScore} from "./utils";
 
 class World {
     constructor() {

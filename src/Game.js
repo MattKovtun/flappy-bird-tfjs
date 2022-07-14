@@ -9,7 +9,6 @@ class Game {
         this.canvas = canvas;
         this.ctx = this.canvas.getContext('2d');
         this.birdJump = false;
-        this.c = 0;
         this.img = new Image();
         this.img.src = config.img;
     }
@@ -79,12 +78,11 @@ class Game {
     };
 
     renderFrame() {
-        this.c++;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.img, 0, 0, this.canvas.width, this.canvas.height + 350, 
-            -((this.c / config.world.refreshRate * 50) % this.canvas.width) + this.canvas.width, 0, this.canvas.width, this.canvas.height);
+            -((this.tick / config.world.refreshRate * 50) % this.canvas.width) + this.canvas.width, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.img, 0, 0, this.canvas.width, this.canvas.height + 350, 
-            -((this.c / config.world.refreshRate * 50) % this.canvas.width) + 1, 0, this.canvas.width, this.canvas.height);
+            -((this.tick / config.world.refreshRate * 50) % this.canvas.width) + 1, 0, this.canvas.width, this.canvas.height);
 
         this.bird.render(this.ctx);
         this.blocks.map((el) => el.render(this.ctx));

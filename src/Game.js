@@ -5,9 +5,9 @@ import {getRandomInt} from "./utils";
 
 
 class Game {
-    constructor(canvas, ctx) {
-        this.ctx = ctx;
+    constructor(canvas) {
         this.canvas = canvas;
+        this.ctx = this.canvas.getContext('2d');
         this.birdJump = false;
         this.startNewGame()
     }

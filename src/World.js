@@ -9,9 +9,8 @@ class World {
         this.info = new Info();
 
         this.canvas = document.getElementById("entry-point");
-        this.ctx = this.canvas.getContext('2d');
 
-        this.game = new Game(this.canvas, this.ctx);
+        this.game = new Game(this.canvas);
         this.agent = new Agent(config.agent.saveStates);
 
 

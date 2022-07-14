@@ -1,10 +1,13 @@
 import Game from "./Game";
 import Agent from "./Agent";
 import config from "./config";
+import Info from "./Info";
 import {renderWorldVerbose, renderScore} from "./utils";
 
 class World {
     constructor() {
+        this.info = new Info();
+
         this.canvas = document.getElementById("entry-point");
         this.ctx = this.canvas.getContext('2d');
 
@@ -28,7 +31,7 @@ class World {
             this.game.renderFrame();
 
             const {score, gameIsOver, birdJump} = worldState;
-            renderScore(score);
+            this.info.renderScore(score);
 
             let action;
             if (!birdJump) {
@@ -51,7 +54,9 @@ class World {
         await this.playOneEpisode(renderEpisode);
 
         await this.agent.retrainModel(this.episodes.length);
-        renderWorldVerbose(this.agent.explorationRate, this.agent.losses, this.episodes);
+
+        this.info.renderLosses(this.agent.losses);
+        this.info.renderInformation(this.episodes, this.agent.explorationRate);
     };
 
 

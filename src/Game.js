@@ -80,7 +80,6 @@ class Game {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.bird.render(this.ctx);
         this.blocks.map((el) => el.render(this.ctx));
-
     }
 }
 

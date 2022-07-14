@@ -7,6 +7,27 @@ let skip = 0;
 let renderEpisode = true;
 
 
+// const ctx = document.getElementById('losses-chart').getContext('2d');
+
+// const data = {
+//     datasets: [{
+//       label: 'Loses',
+//       data: [],
+//       fill: false,
+//       borderColor: 'rgb(75, 192, 192)',
+//       tension: 0.1
+//     }]
+//   };
+// const chart = new Chart(ctx, {
+//     type: 'line',
+//     data: data,
+//     options: {
+//         responsive: true,
+//         maintainAspectRatio: false,
+//     }
+// });
+
+
 const main = async (world) => {
     while (world.playGame) {
         renderEpisode = skip > 0 ? false: true;

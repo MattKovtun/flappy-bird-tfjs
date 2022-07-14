@@ -61,7 +61,6 @@ class Agent {
 
 
         const h = await this.model.fit(xs, ys, {epochs: this.epochs});
-        // console.log("Loss after Epoch " + " : " + h.history.loss[0]);
         this.losses.push(h.history.loss[0]);
 
     }

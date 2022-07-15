@@ -43,7 +43,7 @@ class World {
                 this.scores.push(score);
                 break;
             }
-            if (renderEpisode) await new Promise((resolve, reject) => setTimeout(resolve, this.refreshRate));
+            if (renderEpisode || score >= 10) await new Promise((resolve, reject) => setTimeout(resolve, this.refreshRate));
 
         }
     }

@@ -23,29 +23,28 @@ class Agent {
         // const lossFn = (pred, label) => pred.sub(label).square().mean();
         this.model = tf.sequential();
         this.model.add(tf.layers.dense({units: 4, inputShape: [this.inputShapeLength]}));
-        // this.model.add(tf.layers.dense({units: 4}));
+        this.model.add(tf.layers.dense({units: 4}));
         this.model.add(tf.layers.dense({units: 2}));
         this.model.compile({loss: 'meanSquaredError', optimizer: tf.train.adam(config.agent.learningRate)});
-        // console.log(this.model);
-
     }
 
     modelPredict(input) {
         const prediction = this.model.predict((tf.tensor2d(input, [1, this.inputShapeLength])));
         const action = prediction.argMax(1).dataSync()[0];
         const predictedReward = prediction.max(1).dataSync()[0];
+        console.log(prediction.dataSync());
         return {action: action, predictedReward: predictedReward};
     }
 
     async retrainModel(numOfEpisodes) {
         if (this.history.length >= this.saveStates)
-            this.history = this.history.slice(Math.floor(this.history.length / 2));
+            this.history = this.history.slice(1000);
 
         if (numOfEpisodes % this.numberOfEpisodesBeforeRetrain != 0) return;
 
         let xs = [];
         let ys = [];
-        for (let i = Math.min(this.batch, this.history.length - 1); i >= 0; --i) {
+        for (let i = Math.min(this.history.length - 1); i >= 0; --i) {
             const element = this.history[this.history.length - 1 - i];
             xs.push(element.state);
 
@@ -136,6 +135,8 @@ class Agent {
         this.history[prevState].reward = reward;
         this.history[prevState].nextState = state;
         this.history[prevState].gameIsOver = gameIsOver;
+        console.log(this.history[prevState].reward);
+
     }
 
 }

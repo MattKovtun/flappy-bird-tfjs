@@ -60,7 +60,7 @@ document
             skip = 50;
             break;
         case 'buttonskip-3':
-            skip = 100;
+            skip = 100000000;
             break;
     }
 })

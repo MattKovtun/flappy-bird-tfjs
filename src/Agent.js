@@ -22,7 +22,7 @@ class Agent {
         //TODO: test different losses, architectures
         // const lossFn = (pred, label) => pred.sub(label).square().mean();
         this.model = tf.sequential();
-        this.model.add(tf.layers.dense({units: 4, inputShape: [this.inputShapeLength]}));
+        this.model.add(tf.layers.dense({units: 4, kernelInitializer: tf.initializers.randomNormal(1), inputShape: [this.inputShapeLength]}));
         // this.model.add(tf.layers.dense({units: 4, activation: 'relu'}));
         this.model.add(tf.layers.dense({units: 4, useBias: false}));
 

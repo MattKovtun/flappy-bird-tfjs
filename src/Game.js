@@ -80,9 +80,9 @@ class Game {
     renderFrame() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.img, 0, 0, this.canvas.width, this.canvas.height + 350, 
-            -((this.tick / config.world.refreshRate * 50) % this.canvas.width) + this.canvas.width, 0, this.canvas.width, this.canvas.height);
+            -((this.tick / 13 * 50) % this.canvas.width) + this.canvas.width, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.img, 0, 0, this.canvas.width, this.canvas.height + 350, 
-            -((this.tick / config.world.refreshRate * 50) % this.canvas.width) + 1, 0, this.canvas.width, this.canvas.height);
+            -((this.tick / 13 * 50) % this.canvas.width) + 1, 0, this.canvas.width, this.canvas.height);
 
         this.bird.render(this.ctx);
         this.blocks.map((el) => el.render(this.ctx));

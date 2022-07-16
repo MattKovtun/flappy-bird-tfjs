@@ -5,10 +5,10 @@ export default {
         width: 400,
         refreshRate: 13,
         blocksFrequency: 200,
-        shift: 3,
-        heightRandomness: 50,
+        shift: 6,
+        heightRandomness: 60,
         widthRandomness: 30,
-        nextBlockX: 125,
+        nextBlockX: 120,
 
     },
     bird: {

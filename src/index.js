@@ -54,13 +54,13 @@ document
     .addEventListener('click', (ev) => {
     switch (ev.target.id) {
         case 'buttonskip-1':
-            skip = 5;
+            skip = 20;
             break;
         case 'buttonskip-2':
-            skip = 10;
+            skip = 50;
             break;
         case 'buttonskip-3':
-            skip = 20;
+            skip = 100;
             break;
     }
 })

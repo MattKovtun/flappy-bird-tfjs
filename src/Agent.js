@@ -23,7 +23,9 @@ class Agent {
         // const lossFn = (pred, label) => pred.sub(label).square().mean();
         this.model = tf.sequential();
         this.model.add(tf.layers.dense({units: 4, inputShape: [this.inputShapeLength]}));
-        this.model.add(tf.layers.dense({units: 4}));
+        // this.model.add(tf.layers.dense({units: 4, activation: 'relu'}));
+        this.model.add(tf.layers.dense({units: 4, useBias: false}));
+
         this.model.add(tf.layers.dense({units: 2}));
         this.model.compile({loss: 'meanSquaredError', optimizer: tf.train.adam(config.agent.learningRate)});
     }
@@ -62,6 +64,10 @@ class Agent {
         const h = await this.model.fit(xs, ys, {epochs: this.epochs});
         this.losses.push(Math.round(h.history.loss[0]));
 
+        // for (let i = 0; i < this.model.getWeights().length; i++) {
+        //     console.log(this.model.getWeights()[i].dataSync());
+        // }
+
     }
 
 
@@ -72,7 +78,7 @@ class Agent {
 
         const inputs = this.formModelInputs(worldState.bird, worldState.blocks);
 
-        let reward = inputs[0] < inputs[2] && inputs[1] > inputs[2] ? 100 : -100;
+        let reward = inputs[0] < worldState.bird.y && inputs[1] > worldState.bird.y + worldState.bird.height ? 100 : -100;
 
         return reward;
 
@@ -98,6 +104,7 @@ class Agent {
         const {bird, blocks, gameIsOver} = worldState;
 
         const reward = this.calculateReward(worldState);
+
 
         const input = this.formModelInputs(bird, blocks);
         const {action, predictedReward} = this.getActionReward(input, worldState.score);
@@ -135,7 +142,7 @@ class Agent {
         this.history[prevState].reward = reward;
         this.history[prevState].nextState = state;
         this.history[prevState].gameIsOver = gameIsOver;
-        console.log(this.history[prevState].reward);
+        console.log(this.history[prevState].reward, gameIsOver, state);
 
     }
 
